@@ -1,0 +1,388 @@
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Play,
+  X,
+  CheckCircle2,
+  ChevronDown,
+  Star,
+  Quote,
+  Phone,
+  ArrowRight,
+  ShieldCheck,
+  Award,
+  Users,
+} from 'lucide-react';
+
+const FAQ_ITEMS = [
+  {
+    q: 'How does it work?',
+    a: 'Choose your desired vehicle, select your pickup date and time, complete our quick online verification, and pick up your keys from any hub or opt for doorstep delivery.',
+  },
+  {
+    q: 'Can I rent a car without a credit card?',
+    a: 'Yes, we accept debit cards, UPI, net banking, and verified digital payment options along with a refundable security deposit.',
+  },
+  {
+    q: 'What are the requirements for renting a car?',
+    a: 'You must be at least 21 years old and hold a valid, non-provisional Driving License and a government-issued photo ID (Passport/Aadhaar/National ID).',
+  },
+  {
+    q: 'Does car rental allow me to travel outside the city?',
+    a: 'Absolutely! All our rentals feature all-India interstate tourist permits so you can drive freely across borders without hassle.',
+  },
+  {
+    q: 'Can I rent a car for multiple days?',
+    a: 'Yes, we provide hourly, daily, weekly, and monthly long-term subscription packages with discounted tier rates.',
+  },
+];
+
+const REVIEWS = [
+  {
+    name: 'Emanuel Raps',
+    car: 'BMW 3 Series',
+    text: 'Ut aliquet sapien et sapien pellentesque dictum turpis. Ut pellentesque turpis viverra a id laoreet tortor. Amazing ride quality and spotless vehicle condition!',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop',
+    rating: 5,
+  },
+  {
+    name: 'Peter Evans',
+    car: 'Mercedes C-Class',
+    text: 'Faucibus facilisis pellentesque dictum turpis. Ut pellentesque turpis viverra a id laoreet tortor. Effortless booking and key pickup at the airport!',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop',
+    rating: 5,
+  },
+  {
+    name: 'Ryder Malone',
+    car: 'Porsche Taycan',
+    text: 'Quam neque odio urna euismod felis. Eget feugiat magna in quisque fermentum tellus morbi egestas. Exceptional customer service and road safety.',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop',
+    rating: 5,
+  },
+];
+
+const AboutUs = () => {
+  const [openFaq, setOpenFaq] = useState(0);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
+
+  const toggleFaq = (index) => {
+    setOpenFaq(openFaq === index ? null : index);
+  };
+
+  return (
+    <div className="bg-white text-[#151515] w-full">
+      {/* ==================== 1. FULL WIDTH HEADER ==================== */}
+      <div className="w-full bg-[#F8F8FA] border-b border-[#EAEAEA] py-10 mb-12 rounded-none">
+        <div className="container-fluid text-center">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#151515] font-heading">
+            About Us
+          </h1>
+          <p className="text-xs sm:text-sm text-[#777777] mt-1">
+            <Link to="/" className="hover:text-brand-primary">Home</Link> / About Us
+          </p>
+        </div>
+      </div>
+
+      {/* Two-Column Intro */}
+      <section className="container-fluid mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          <div className="lg:col-span-5">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#151515] font-heading leading-tight">
+              Where every drive feels extraordinary
+            </h2>
+          </div>
+
+          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs sm:text-sm text-[#777777]">
+            <div>
+              <h3 className="text-sm sm:text-base font-bold text-[#151515] mb-1.5">Variety Brands</h3>
+              <p className="leading-relaxed">
+                Extensive collection of world-class automobiles, executive luxury sedans, rugged off-road SUVs, and nimble electric city scooties.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-sm sm:text-base font-bold text-[#151515] mb-1.5">Awesome Support</h3>
+              <p className="leading-relaxed">
+                Dedicated 24/7 concierge assistance, roadside mechanical support, and replacement vehicle guarantees anywhere across your itinerary.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-sm sm:text-base font-bold text-[#151515] mb-1.5">Maximum Freedom</h3>
+              <p className="leading-relaxed">
+                Self-drive independence with transparent unlimited kilometer options, zero paperwork roadblocks, and instant app verification.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-sm sm:text-base font-bold text-[#151515] mb-1.5">Flexibility On The Go</h3>
+              <p className="leading-relaxed">
+                Modify travel dates, alter pickup points, or extend rental durations effortlessly through our modern web and mobile platform.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== 2. FULL WIDTH VIDEO SECTION ==================== */}
+      <section className="w-full mb-16 overflow-hidden rounded-none shadow-md">
+        <div className="relative overflow-hidden aspect-[21/9] sm:aspect-[16/7] bg-gray-900 group rounded-none">
+          <img
+            src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop"
+            alt="Car on Highway"
+            className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
+          />
+
+          {/* Centered Play Button */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <button
+              onClick={() => setVideoModalOpen(true)}
+              className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-brand-primary hover:bg-brand-primaryHover text-white flex items-center justify-center shadow-2xl transition-transform hover:scale-110 ring-8 ring-white/30"
+              aria-label="Play Video"
+            >
+              <Play className="w-8 h-8 sm:w-10 sm:h-10 fill-current ml-1" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Video Modal */}
+      {videoModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+          <div className="relative w-full max-w-4xl bg-black rounded-2xl overflow-hidden shadow-2xl">
+            <button
+              onClick={() => setVideoModalOpen(false)}
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <div className="aspect-video">
+              <iframe
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                title="Car Rental Experience Reel"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ==================== 3. STATISTICS ==================== */}
+      <section className="container-fluid mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center py-10 border-y border-[#EAEAEA]">
+          <div>
+            <span className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-brand-primary">
+              20k+
+            </span>
+            <p className="text-xs sm:text-sm text-[#777777] font-semibold mt-1 uppercase tracking-wider">
+              Happy customers
+            </p>
+          </div>
+
+          <div>
+            <span className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-brand-primary">
+              540+
+            </span>
+            <p className="text-xs sm:text-sm text-[#777777] font-semibold mt-1 uppercase tracking-wider">
+              Count of cars
+            </p>
+          </div>
+
+          <div>
+            <span className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-brand-primary">
+              25+
+            </span>
+            <p className="text-xs sm:text-sm text-[#777777] font-semibold mt-1 uppercase tracking-wider">
+              Years of experience
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== 4. BENEFITS SECTION ==================== */}
+      <section className="container-fluid mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div className="lg:col-span-6 space-y-6">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#151515] font-heading leading-tight">
+              Unlock unforgettable memories on the road
+            </h2>
+            <p className="text-sm sm:text-base text-[#777777] leading-relaxed">
+              We empower drivers with meticulously maintained vehicles, transparent all-inclusive quotes, and effortless smartphone booking.
+            </p>
+
+            <div className="space-y-3.5 pt-2">
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-xs sm:text-sm font-semibold text-[#151515]">
+                  Pristine safety inspections before every departure
+                </span>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-xs sm:text-sm font-semibold text-[#151515]">
+                  Instant key pickup at terminals and train hubs
+                </span>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-xs sm:text-sm font-semibold text-[#151515]">
+                  Zero hidden extras, honest fuel replacement rules
+                </span>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-xs sm:text-sm font-semibold text-[#151515]">
+                  24/7 dedicated support phone line
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-6">
+            <div className="rounded-3xl overflow-hidden aspect-[16/10] bg-gray-100 shadow-xl">
+              <img
+                src="https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1400&auto=format&fit=crop"
+                alt="Driving Experience"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* ==================== 6. CUSTOMER REVIEWS ==================== */}
+      <section className="container-fluid mb-16">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#151515] font-heading">
+            Reviews from our customers
+          </h2>
+          <p className="text-xs sm:text-sm text-[#777777] mt-1">
+            Real stories from travelers who explored the roads with RideVista
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          {REVIEWS.map((rev, idx) => (
+            <div
+              key={idx}
+              className="p-6 sm:p-8 rounded-2xl bg-[#F8F8FA] border border-[#EAEAEA] flex flex-col justify-between shadow-sm"
+            >
+              <div>
+                <Quote className="w-8 h-8 text-brand-primary mb-3 opacity-60" />
+                <p className="text-xs sm:text-sm text-[#777777] leading-relaxed mb-6">
+                  "{rev.text}"
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 pt-4 border-t border-[#EAEAEA]">
+                <img
+                  src={rev.avatar}
+                  alt={rev.name}
+                  className="w-11 h-11 rounded-full object-cover border-2 border-brand-primary"
+                />
+                <div>
+                  <h4 className="text-sm font-bold text-[#151515]">{rev.name}</h4>
+                  <p className="text-xs text-[#777777]">{rev.car}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ==================== 7. TOP CAR RENTAL FAQ ==================== */}
+      <section className="container-fluid mb-16">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#151515] font-heading">
+              Top Car Rental Questions
+            </h2>
+            <p className="text-xs sm:text-sm text-[#777777] mt-1">
+              Everything you need to know before booking your ride
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            {FAQ_ITEMS.map((item, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <div
+                  key={idx}
+                  className="rounded-xl border border-[#EAEAEA] bg-white overflow-hidden transition-all shadow-sm"
+                >
+                  <button
+                    onClick={() => toggleFaq(idx)}
+                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-xs sm:text-sm text-[#151515] hover:text-brand-primary"
+                  >
+                    <span>{item.q}</span>
+                    <ChevronDown
+                      className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${
+                        isOpen ? 'rotate-180 text-brand-primary' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {isOpen && (
+                    <div className="px-4 sm:px-5 pb-5 text-xs sm:text-sm text-[#777777] leading-relaxed border-t border-gray-100 pt-3">
+                      {item.a}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== 8. FULL WIDTH CTA BANNER ==================== */}
+      <section className="w-full bg-brand-primary text-white py-12 lg:py-16 rounded-none shadow-xl relative overflow-hidden">
+        <div className="container-fluid flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="space-y-3">
+            <h3 className="text-2xl sm:text-4xl font-extrabold font-heading">
+              Looking for a car?
+            </h3>
+            <p className="text-base sm:text-lg font-bold text-white/90">
+              +537 547-6401
+            </p>
+            <p className="text-xs sm:text-sm text-white/80 max-w-lg leading-relaxed">
+              Speak directly with our concierge team or book instantly through our self-service portal.
+            </p>
+
+            <div className="pt-2">
+              <Link
+                to="/vehicles"
+                className="inline-block px-7 py-3.5 rounded-xl bg-white text-brand-primary hover:bg-gray-100 font-bold text-xs sm:text-sm tracking-wide shadow-md transition-all"
+              >
+                Book Now
+              </Link>
+            </div>
+          </div>
+
+          <div className="shrink-0 max-w-md">
+            <img
+              src="https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=600&auto=format&fit=crop"
+              alt="Call to action car"
+              className="w-full object-contain drop-shadow-xl"
+            />
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default AboutUs;
