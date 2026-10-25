@@ -162,7 +162,7 @@ export const createBooking = async (req, res) => {
 export const getMyBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({ customer: req.user._id })
-      .populate('vehicle', 'name brand model images vehicleType category pricePerDay')
+      .populate('vehicle', 'name brand model images vehicleType category pricePerDay fuelType transmission seatingCapacity registrationNumber features')
       .sort({ createdAt: -1 });
 
     res.json({
@@ -323,10 +323,11 @@ export const downloadInvoice = async (req, res) => {
       });
     }
 
-    if (
-      booking.customer._id.toString() !== req.user._id.toString() &&
-      req.user.role !== 'admin'
-    ) {
+    const customerId = booking.customer?._id?.toString() || booking.customer?.toString();
+    const isOwner = customerId && req.user && customerId === req.user._id.toString();
+    const isAdmin = req.user && req.user.role === 'admin';
+
+    if (!isOwner && !isAdmin) {
       return res.status(403).json({
         success: false,
         message: 'Unauthorized to download this invoice.',

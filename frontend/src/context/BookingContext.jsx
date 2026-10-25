@@ -9,8 +9,8 @@ const defaultTomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000)
 
 export const BookingProvider = ({ children }) => {
   const [searchFilters, setSearchFilters] = useState({
-    pickupLocation: 'Airport Terminal 1 & 3',
-    returnLocation: 'Airport Terminal 1 & 3',
+    pickupLocation: 'Aerocity Hub',
+    returnLocation: 'Aerocity Hub',
     pickupDate: defaultToday,
     pickupTime: '10:00 AM',
     returnDate: defaultTomorrow,

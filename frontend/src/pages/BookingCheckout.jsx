@@ -40,8 +40,8 @@ const BookingCheckout = () => {
   const [additionalNotes, setAdditionalNotes] = useState('');
 
   // Trip Data
-  const [pickupLocation, setPickupLocation] = useState(searchFilters.pickupLocation || 'Airport Terminal 1 & 3');
-  const [returnLocation, setReturnLocation] = useState(searchFilters.returnLocation || 'Airport Terminal 1 & 3');
+  const [pickupLocation, setPickupLocation] = useState(searchFilters.pickupLocation || 'Aerocity Hub');
+  const [returnLocation, setReturnLocation] = useState(searchFilters.returnLocation || 'Aerocity Hub');
   const [pickupDate, setPickupDate] = useState(searchFilters.pickupDate);
   const [pickupTime, setPickupTime] = useState(searchFilters.pickupTime || '10:00 AM');
   const [returnDate, setReturnDate] = useState(searchFilters.returnDate);

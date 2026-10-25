@@ -1,27 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { vehicleService } from '../services/vehicleService';
 import VehicleCard from '../components/VehicleCard';
+import BrandMarquee from '../components/BrandMarquee';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { Search, SlidersHorizontal, ArrowUpDown } from 'lucide-react';
 
-const BRANDS = [
-  { name: 'Toyota', logo: 'https://upload.wikimedia.org/wikipedia/commons/e/ee/Toyota_logo_%282020%29.svg' },
-  { name: 'Ford', logo: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Ford_logo_flat.svg' },
-  { name: 'Mercedes-Benz', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Mercedes-Logo.svg' },
-  { name: 'Jeep', logo: 'https://upload.wikimedia.org/wikipedia/commons/8/87/Jeep_logo.svg' },
-  { name: 'BMW', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg' },
-  { name: 'Audi', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg' },
-];
-
 const CATEGORIES = [
   'All Vehicles',
+  'Toyota',
+  'Ford',
+  'Mercedes-Benz',
+  'Jeep',
+  'BMW',
+  'Audi',
   'SUV',
   'Sedan',
-  'Hatchback',
-  'MUV',
-  'Bikes',
-  'Scooties',
   'Luxury',
 ];
 
@@ -55,7 +50,7 @@ const Vehicles = () => {
 
   // Filter vehicles based on active category and search
   const filteredVehicles = vehicles.filter((v) => {
-    // Category filtering
+    // Category & Brand filtering
     if (selectedCategory !== 'All Vehicles') {
       if (selectedCategory === 'Scooties') {
         if (v.vehicleType !== 'scooty' && v.category !== 'Scooties') return false;
@@ -63,6 +58,9 @@ const Vehicles = () => {
         if (v.vehicleType !== 'bike' && v.category !== 'Bikes') return false;
       } else if (selectedCategory === 'Electric') {
         if (v.fuelType !== 'Electric') return false;
+      } else if (v.brand?.toLowerCase() === selectedCategory.toLowerCase()) {
+        // Direct brand match (Toyota, Ford, Mercedes-Benz, Jeep, BMW, Audi)
+        return true;
       } else {
         const matchesCategory =
           v.category?.toLowerCase() === selectedCategory.toLowerCase() ||
@@ -89,7 +87,6 @@ const Vehicles = () => {
   const sortedVehicles = [...filteredVehicles].sort((a, b) => {
     if (sortBy === 'price-low') return a.pricePerDay - b.pricePerDay;
     if (sortBy === 'price-high') return b.pricePerDay - a.pricePerDay;
-    if (sortBy === 'rating') return (b.rating || 5) - (a.rating || 5);
     return 0; // Default order
   });
 
@@ -119,8 +116,7 @@ const Vehicles = () => {
       </div>
 
       <div className="container-fluid">
-
-        {/* Category Tabs (Screenshot 2: Pill Buttons) */}
+        {/* Category Tabs with Animated Sliding Pill */}
         <div className="flex items-center justify-center flex-wrap gap-2 sm:gap-2.5 mb-6 sm:mb-8">
           {CATEGORIES.map((cat) => {
             const isActive = selectedCategory.toLowerCase() === cat.toLowerCase();
@@ -128,13 +124,20 @@ const Vehicles = () => {
               <button
                 key={cat}
                 onClick={() => handleCategoryClick(cat)}
-                className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold tracking-wide transition-all ${
+                className={`relative px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold tracking-wide transition-colors ${
                   isActive
-                    ? 'bg-brand-primary text-white shadow-md'
+                    ? 'text-white'
                     : 'bg-[#F8F8FA] text-[#777777] hover:bg-gray-200 hover:text-[#151515]'
                 }`}
               >
-                {cat}
+                {isActive && (
+                  <motion.div
+                    layoutId="activeVehiclesCategoryPill"
+                    className="absolute inset-0 bg-brand-primary rounded-full shadow-md -z-0"
+                    transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
+                  />
+                )}
+                <span className="relative z-10">{cat}</span>
               </button>
             );
           })}
@@ -146,7 +149,11 @@ const Vehicles = () => {
             <LoadingSpinner size="lg" />
           </div>
         ) : sortedVehicles.length === 0 ? (
-          <div className="text-center py-20 bg-[#F8F8FA] rounded-2xl border border-[#EAEAEA]">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center py-20 bg-[#F8F8FA] rounded-2xl border border-[#EAEAEA]"
+          >
             <p className="text-sm font-semibold text-gray-500 mb-2">
               No vehicles matched your criteria.
             </p>
@@ -159,48 +166,34 @@ const Vehicles = () => {
             >
               Reset filters and view all
             </button>
-          </div>
+          </motion.div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-6 sm:gap-8">
-            {sortedVehicles.map((vehicle) => (
-              <VehicleCard key={vehicle._id} vehicle={vehicle} />
-            ))}
-          </div>
+          <motion.div
+            layout
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5 items-stretch"
+          >
+            <AnimatePresence mode="popLayout">
+              {sortedVehicles.map((vehicle, index) => (
+                <motion.div
+                  key={vehicle._id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.85 }}
+                  transition={{ duration: 0.35, delay: Math.min(index * 0.05, 0.4) }}
+                  className="h-full"
+                >
+                  <VehicleCard vehicle={vehicle} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         )}
       </div>
 
-      {/* Brand Logos Full Width Strip */}
-      <div id="brands" className="w-full bg-[#F8F8FA] border-t border-[#EAEAEA] py-12 mt-16 rounded-none">
-        <div className="container-fluid">
-          <div className="text-center mb-6">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-[#777777]">
-              Trusted By Global Automotive Brands
-            </span>
-          </div>
-
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-6 sm:gap-8 items-center justify-items-center opacity-70 hover:opacity-100 transition-opacity">
-            {BRANDS.map((brand) => (
-              <div
-                key={brand.name}
-                className="flex flex-col items-center justify-center p-3 grayscale hover:grayscale-0 transition-all hover:scale-105"
-              >
-                <img
-                  src={brand.logo}
-                  alt={brand.name}
-                  className="h-8 sm:h-10 w-auto object-contain max-w-[90px]"
-                  onError={(e) => {
-                    // Fallback to text if svg fails to load
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling.style.display = 'block';
-                  }}
-                />
-                <span className="hidden text-sm font-extrabold tracking-wider text-gray-800">
-                  {brand.name}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* Dual Direction Brand Marquee */}
+      <div id="brands" className="mt-16">
+        <BrandMarquee onSelectBrand={(brand) => handleCategoryClick(brand)} />
       </div>
     </div>
   );

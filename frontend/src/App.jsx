@@ -48,13 +48,16 @@ import AdminContacts from './admin/AdminContacts';
 import AdminReports from './admin/AdminReports';
 import AdminSettings from './admin/AdminSettings';
 import AdminProfile from './admin/AdminProfile';
+import AnimatedPage from './components/AnimatedPage';
 
 // Layout wrapper for customer-facing pages
 const CustomerLayout = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <main className="flex-grow">{children}</main>
+      <main className="flex-grow overflow-x-hidden">
+        <AnimatedPage>{children}</AnimatedPage>
+      </main>
       <Footer />
     </div>
   );

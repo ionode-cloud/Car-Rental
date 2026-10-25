@@ -309,4 +309,110 @@ html[data-theme="purple"],
   .ring-\[\#5935E8\]\/20 { --tw-ring-color: rgba(var(--primary-rgb), 0.2) !important; }
   .focus\:border-\[\#5935E8\]:focus { border-color: var(--primary) !important; }
   .focus\:ring-\[\#5935E8\]:focus { --tw-ring-color: var(--primary) !important; }
+
+  /* ========================================================
+     PREMIUM ANIMATED CARD & INTERACTIVE UI UTILITIES
+     ======================================================== */
+  .card-animated-premium {
+    position: relative;
+    background: #FFFFFF;
+    border: 1px solid #ECECF2;
+    border-radius: 1.5rem;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
+  }
+  .card-animated-premium:hover {
+    transform: translateY(-7px);
+    border-color: rgba(var(--primary-rgb), 0.45) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08), 0 12px 30px -6px rgba(var(--primary-rgb), 0.22) !important;
+  }
+
+  /* Ambient Showcase Spotlight */
+  .card-spotlight {
+    position: relative;
+    background: radial-gradient(circle at 50% 60%, rgba(var(--primary-rgb), 0.09) 0%, rgba(248, 248, 252, 0.8) 55%, #F4F4F9 100%);
+    transition: all 0.5s ease;
+  }
+  .group:hover .card-spotlight {
+    background: radial-gradient(circle at 50% 55%, rgba(var(--primary-rgb), 0.18) 0%, rgba(var(--primary-rgb), 0.04) 65%, #F0EEF8 100%);
+  }
+
+  /* Frosted Glass Badges */
+  .badge-glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  }
+
+  /* Shimmer Shine Sweep on Hover */
+  .shine-sweep {
+    position: relative;
+    overflow: hidden;
+  }
+  .shine-sweep::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 220%;
+    height: 200%;
+    background: linear-gradient(
+      60deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.4) 50%,
+      transparent 65%
+    );
+    transform: translateX(-100%) rotate(35deg);
+    transition: transform 0.8s ease;
+    pointer-events: none;
+  }
+  .group:hover .shine-sweep::after,
+  .shine-sweep:hover::after {
+    transform: translateX(100%) rotate(35deg);
+  }
+
+  /* Spec Pill Hover */
+  .spec-pill {
+    background: #F8F8FC;
+    border: 1px solid #ECECF2;
+    transition: all 0.25s ease;
+  }
+  .spec-pill:hover,
+  .group:hover .spec-pill {
+    background: #FFFFFF;
+    border-color: rgba(var(--primary-rgb), 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  }
+
+  /* Dual-Direction Infinite Marquee */
+  @keyframes marquee-ltr {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0%); }
+  }
+
+  @keyframes marquee-rtl {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .animate-marquee-ltr {
+    display: flex;
+    width: max-content;
+    animation: marquee-ltr 26s linear infinite;
+    will-change: transform;
+  }
+
+  .animate-marquee-rtl {
+    display: flex;
+    width: max-content;
+    animation: marquee-rtl 26s linear infinite;
+    will-change: transform;
+  }
+
+  .animate-marquee-ltr:hover,
+  .animate-marquee-rtl:hover {
+    animation-play-state: paused;
+  }
 }

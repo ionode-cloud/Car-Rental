@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 
 const locations = [
-  'Airport Terminal 1 & 3',
   'Aerocity Hub',
   'Connaught Place Hub',
   'Cyber City Hub',

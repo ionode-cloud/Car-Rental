@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import api from '../services/api';
 import {
   MapPin,
@@ -101,7 +102,13 @@ const ContactUs = () => {
         {/* ==================== 2. MAIN 2-COLUMN LAYOUT ==================== */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch mb-16">
           {/* Left Column: Purple Form Card */}
-          <div className="lg:col-span-5 bg-brand-primary text-white rounded-2xl p-6 sm:p-8 shadow-xl flex flex-col justify-between">
+          <motion.div
+            initial={{ opacity: 0, x: -35 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-5 bg-brand-primary text-white rounded-2xl p-6 sm:p-8 shadow-xl flex flex-col justify-between"
+          >
             <div>
               <h2 className="text-xl sm:text-2xl font-extrabold text-white mb-2">
                 Send Us a Message
@@ -111,17 +118,25 @@ const ContactUs = () => {
               </p>
 
               {submitted && (
-                <div className="mb-4 p-3 bg-white/10 border border-white/30 rounded-xl text-xs flex items-center gap-2">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="mb-4 p-3 bg-white/10 border border-white/30 rounded-xl text-xs flex items-center gap-2"
+                >
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                   <span>Thank you! Your message has been sent successfully.</span>
-                </div>
+                </motion.div>
               )}
 
               {error && (
-                <div className="mb-4 p-3 bg-red-500/20 border border-red-500/40 rounded-xl text-xs flex items-center gap-2">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="mb-4 p-3 bg-red-500/20 border border-red-500/40 rounded-xl text-xs flex items-center gap-2"
+                >
                   <AlertCircle className="w-4 h-4 text-red-300" />
                   <span>{error}</span>
-                </div>
+                </motion.div>
               )}
 
               <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
@@ -133,7 +148,7 @@ const ContactUs = () => {
                     onChange={handleChange}
                     required
                     placeholder="Full Name"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 text-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 text-xs transition-all"
                   />
                 </div>
 
@@ -145,7 +160,7 @@ const ContactUs = () => {
                     onChange={handleChange}
                     required
                     placeholder="Email Address"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 text-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 text-xs transition-all"
                   />
                 </div>
 
@@ -157,7 +172,7 @@ const ContactUs = () => {
                     onChange={handleChange}
                     required
                     placeholder="Phone Number"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 text-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 text-xs transition-all"
                   />
                 </div>
 
@@ -169,7 +184,7 @@ const ContactUs = () => {
                     onChange={handleChange}
                     required
                     placeholder="Subject (e.g. Booking Enquiry)"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 text-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 text-xs transition-all"
                   />
                 </div>
 
@@ -181,28 +196,36 @@ const ContactUs = () => {
                     onChange={handleChange}
                     required
                     placeholder="Your Message..."
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 text-xs resize-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:border-white focus:bg-white/20 text-xs resize-none transition-all"
                   ></textarea>
                 </div>
 
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={loading}
                   className="w-full py-3.5 rounded-xl bg-white hover:bg-gray-100 text-brand-primary font-bold text-xs tracking-wider uppercase transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                 >
                   <Send className="w-3.5 h-3.5" />
                   <span>{loading ? 'Sending...' : 'Send Message'}</span>
-                </button>
+                </motion.button>
               </form>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Large Image / Map */}
-          <div className="lg:col-span-7 rounded-3xl overflow-hidden bg-gray-100 shadow-xl relative min-h-[350px]">
+          <motion.div
+            initial={{ opacity: 0, x: 35 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-7 rounded-3xl overflow-hidden bg-gray-100 shadow-xl relative min-h-[350px] group"
+          >
             <img
               src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop"
               alt="Car Showroom / Contact Hub"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-8">
               <div className="text-white">
@@ -214,67 +237,101 @@ const ContactUs = () => {
                 </h3>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* ==================== 3. CONTACT INFO STRIP ==================== */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 py-8 border-y border-[#EAEAEA] mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-6 py-8 border-y border-[#EAEAEA] mb-16"
+        >
           {/* Address */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0 shadow-sm">
+          <motion.div
+            whileHover={{ y: -3 }}
+            className="flex items-center gap-3 cursor-default"
+          >
+            <motion.div
+              whileHover={{ scale: 1.15, rotate: 5 }}
+              transition={{ type: 'spring', stiffness: 350 }}
+              className="w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0 shadow-sm"
+            >
               <MapPin className="w-4 h-4 fill-white/20" />
-            </div>
+            </motion.div>
             <div>
               <span className="text-[10px] font-bold uppercase text-[#777777] block">
                 Address
               </span>
               <p className="text-xs font-bold text-[#151515]">Oxford Ave. Cary, NC 27511</p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Email */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0 shadow-sm">
+          <motion.div
+            whileHover={{ y: -3 }}
+            className="flex items-center gap-3 cursor-default"
+          >
+            <motion.div
+              whileHover={{ scale: 1.15, rotate: -5 }}
+              transition={{ type: 'spring', stiffness: 350 }}
+              className="w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0 shadow-sm"
+            >
               <Mail className="w-4 h-4 fill-white/20" />
-            </div>
+            </motion.div>
             <div>
               <span className="text-[10px] font-bold uppercase text-[#777777] block">
                 Email
               </span>
-              <a href="mailto:support@carrental.com" className="text-xs font-bold text-[#151515] hover:text-brand-primary">
+              <a href="mailto:support@carrental.com" className="text-xs font-bold text-[#151515] hover:text-brand-primary transition-colors">
                 support@carrental.com
               </a>
             </div>
-          </div>
+          </motion.div>
 
           {/* Phone */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0 shadow-sm">
+          <motion.div
+            whileHover={{ y: -3 }}
+            className="flex items-center gap-3 cursor-default"
+          >
+            <motion.div
+              whileHover={{ scale: 1.15, rotate: 5 }}
+              transition={{ type: 'spring', stiffness: 350 }}
+              className="w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0 shadow-sm"
+            >
               <Phone className="w-4 h-4 fill-white/20" />
-            </div>
+            </motion.div>
             <div>
               <span className="text-[10px] font-bold uppercase text-[#777777] block">
                 Phone
               </span>
-              <a href="tel:+5375476401" className="text-xs font-bold text-[#151515] hover:text-brand-primary">
+              <a href="tel:+5375476401" className="text-xs font-bold text-[#151515] hover:text-brand-primary transition-colors">
                 +537 547-6401
               </a>
             </div>
-          </div>
+          </motion.div>
 
           {/* Opening Hours */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0 shadow-sm">
+          <motion.div
+            whileHover={{ y: -3 }}
+            className="flex items-center gap-3 cursor-default"
+          >
+            <motion.div
+              whileHover={{ scale: 1.15, rotate: -5 }}
+              transition={{ type: 'spring', stiffness: 350 }}
+              className="w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0 shadow-sm"
+            >
               <Clock className="w-4 h-4 fill-white/20" />
-            </div>
+            </motion.div>
             <div>
               <span className="text-[10px] font-bold uppercase text-[#777777] block">
                 Opening Hours
               </span>
               <p className="text-xs font-bold text-[#151515]">Sun - Mon 10am - 10pm</p>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* ==================== 4. LATEST BLOG POSTS & NEWS ==================== */}
         <div className="mb-16">
@@ -288,10 +345,15 @@ const ContactUs = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            {BLOG_POSTS.map((post) => (
-              <div
+            {BLOG_POSTS.map((post, idx) => (
+              <motion.div
                 key={post.id}
-                className="rounded-2xl border border-[#EAEAEA] bg-[#F8F8FA] overflow-hidden group hover:shadow-lg transition-all"
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.15, duration: 0.5 }}
+                whileHover={{ y: -8, boxShadow: '0 20px 30px -10px rgba(0,0,0,0.08)' }}
+                className="rounded-2xl border border-[#EAEAEA] bg-[#F8F8FA] overflow-hidden group hover:border-brand-primary/30 transition-all"
               >
                 <div className="h-48 overflow-hidden bg-gray-200">
                   <img
@@ -313,11 +375,11 @@ const ContactUs = () => {
                   </p>
                   <div className="pt-2">
                     <span className="inline-flex items-center gap-1 text-xs font-bold text-brand-primary group-hover:underline">
-                      Read More <ArrowRight className="w-3 h-3" />
+                      Read More <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                     </span>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -326,11 +388,19 @@ const ContactUs = () => {
       {/* ==================== 5. FULL WIDTH BRAND LOGO STRIP ==================== */}
       <div className="w-full bg-[#F8F8FA] border-t border-[#EAEAEA] py-12 mt-16 rounded-none">
         <div className="container-fluid">
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-6 sm:gap-8 items-center justify-items-center opacity-70 hover:opacity-100 transition-opacity">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="grid grid-cols-3 md:grid-cols-6 gap-6 sm:gap-8 items-center justify-items-center opacity-70 hover:opacity-100 transition-opacity"
+          >
             {BRANDS.map((brand) => (
-              <div
+              <motion.div
                 key={brand.name}
-                className="flex flex-col items-center justify-center p-2 grayscale hover:grayscale-0 transition-all hover:scale-105"
+                whileHover={{ scale: 1.15, y: -4 }}
+                transition={{ type: 'spring', stiffness: 350 }}
+                className="flex flex-col items-center justify-center p-2 grayscale hover:grayscale-0 transition-all cursor-pointer"
               >
                 <img
                   src={brand.logo}
@@ -344,9 +414,9 @@ const ContactUs = () => {
                 <span className="hidden text-sm font-extrabold tracking-wider text-gray-800">
                   {brand.name}
                 </span>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

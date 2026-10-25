@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { vehicleService } from '../services/vehicleService';
 import { useBooking } from '../context/BookingContext';
 import { formatCurrency } from '../utils/formatters';
@@ -130,21 +131,35 @@ const VehicleDetails = () => {
         {/* Two-Column Main Layout (Screenshot 3) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start mb-16">
           {/* Left Column: Big Vehicle Photo & Gallery Thumbnails */}
-          <div className="lg:col-span-7 space-y-4">
-            <div className="w-full h-72 sm:h-96 rounded-2xl bg-[#F8F8FA] border border-[#EAEAEA] p-6 flex items-center justify-center overflow-hidden">
-              <img
-                src={vehicle.images?.[activeImageIndex] || vehicle.images?.[0]}
-                alt={vehicle.name}
-                className="w-full h-full object-contain hover:scale-105 transition-transform duration-500"
-              />
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-7 space-y-4"
+          >
+            <div className="w-full h-72 sm:h-96 rounded-2xl bg-[#F8F8FA] border border-[#EAEAEA] p-6 flex items-center justify-center overflow-hidden relative">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={activeImageIndex}
+                  src={vehicle.images?.[activeImageIndex] || vehicle.images?.[0]}
+                  alt={vehicle.name}
+                  initial={{ opacity: 0, scale: 0.94 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.03 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-full h-full object-contain"
+                />
+              </AnimatePresence>
             </div>
 
             {/* Thumbnail Row */}
             {vehicle.images && vehicle.images.length > 1 && (
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                 {vehicle.images.map((imgUrl, idx) => (
-                  <button
+                  <motion.button
                     key={idx}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => setActiveImageIndex(idx)}
                     className={`h-20 sm:h-24 rounded-xl bg-[#F8F8FA] border p-2 flex items-center justify-center overflow-hidden transition-all ${
                       activeImageIndex === idx
@@ -157,7 +172,7 @@ const VehicleDetails = () => {
                       alt={`Thumbnail ${idx + 1}`}
                       className="w-full h-full object-contain"
                     />
-                  </button>
+                  </motion.button>
                 ))}
               </div>
             )}
@@ -168,10 +183,15 @@ const VehicleDetails = () => {
                 <p>{vehicle.description}</p>
               </div>
             )}
-          </div>
+          </motion.div>
 
           {/* Right Column: Technical Specification & Car Equipment */}
-          <div className="lg:col-span-5 space-y-6">
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-5 space-y-6"
+          >
             <div>
               <h3 className="text-sm font-bold text-[#151515] uppercase tracking-wider mb-4">
                 Technical Specification
@@ -182,9 +202,11 @@ const VehicleDetails = () => {
                 {techSpecs.map((spec, idx) => {
                   const Icon = spec.icon;
                   return (
-                    <div
+                    <motion.div
                       key={idx}
-                      className="p-3.5 rounded-xl bg-[#F8F8FA] border border-[#EAEAEA] text-center flex flex-col items-center justify-center"
+                      whileHover={{ y: -4, boxShadow: '0 8px 16px rgba(0,0,0,0.06)' }}
+                      transition={{ type: 'spring', stiffness: 350 }}
+                      className="p-3.5 rounded-xl bg-[#F8F8FA] border border-[#EAEAEA] text-center flex flex-col items-center justify-center transition-colors hover:border-brand-primary/40 cursor-default"
                     >
                       <Icon className="w-4 h-4 text-brand-primary mb-1.5" />
                       <span className="text-[10px] text-[#777777] font-medium block">
@@ -193,7 +215,7 @@ const VehicleDetails = () => {
                       <strong className="text-xs font-bold text-[#151515] mt-0.5 truncate max-w-full">
                         {spec.value}
                       </strong>
-                    </div>
+                    </motion.div>
                   );
                 })}
               </div>
@@ -201,13 +223,18 @@ const VehicleDetails = () => {
 
             {/* Rent Now Action Button */}
             <div className="pt-2">
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={handleBookNow}
-                className="w-full py-4 px-6 rounded-xl bg-brand-primary hover:bg-brand-primaryHover text-white font-bold text-sm tracking-wide shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                className="w-full py-4 px-6 rounded-xl bg-brand-primary hover:bg-brand-primaryHover text-white font-bold text-sm tracking-wide shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 relative overflow-hidden group"
               >
-                <span>Rent now</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+                <span className="relative z-10 flex items-center gap-2">
+                  <span>Rent now</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </span>
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
+              </motion.button>
             </div>
 
             {/* Car Equipment Section */}
@@ -218,16 +245,20 @@ const VehicleDetails = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 {equipmentList.map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-2">
+                  <motion.div
+                    key={idx}
+                    whileHover={{ x: 4 }}
+                    className="flex items-center gap-2 cursor-default"
+                  >
                     <div className="w-4 h-4 rounded-full bg-brand-primaryLight text-brand-primary flex items-center justify-center shrink-0">
                       <Check className="w-2.5 h-2.5 stroke-[3]" />
                     </div>
                     <span className="text-xs font-semibold text-gray-700">{item}</span>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* "Other cars" Section (Screenshot 3) */}
@@ -238,18 +269,32 @@ const VehicleDetails = () => {
             </h2>
             <Link
               to="/vehicles"
-              className="flex items-center gap-1 text-xs font-bold text-brand-primary hover:underline"
+              className="flex items-center gap-1 text-xs font-bold text-brand-primary hover:underline group"
             >
               <span>View all</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {(similarVehicles.length > 0 ? similarVehicles : []).slice(0, 3).map((car) => (
-              <VehicleCard key={car._id} vehicle={car} />
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+          >
+            {(similarVehicles.length > 0 ? similarVehicles : []).slice(0, 3).map((car, idx) => (
+              <motion.div
+                key={car._id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.15, duration: 0.4 }}
+              >
+                <VehicleCard vehicle={car} />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

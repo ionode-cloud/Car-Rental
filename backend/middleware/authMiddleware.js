@@ -15,6 +15,10 @@ export const protect = async (req, res, next) => {
   ) {
     token = req.headers.authorization.split(' ')[1];
   }
+  // 3. Check query parameter (e.g. for opening invoice PDF in new tab)
+  else if (req.query && req.query.token) {
+    token = req.query.token;
+  }
 
   if (!token) {
     return res.status(401).json({

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { vehicleService } from '../services/vehicleService';
 import VehicleCard from '../components/VehicleCard';
+import BrandMarquee from '../components/BrandMarquee';
 import LoadingSpinner from '../components/LoadingSpinner';
 import {
   Car,
   Calendar,
   Clock,
-  MapPin,
   ShieldCheck,
   HeartHandshake,
   BadgePercent,
@@ -21,12 +22,17 @@ import {
 
 const HOME_CATEGORIES = [
   'All Vehicles',
+  'Toyota',
+  'Ford',
+  'Mercedes-Benz',
+  'Jeep',
+  'BMW',
+  'Audi',
   'SUV',
   'Sedan',
-  'Hatchback',
-  'Bikes',
-  'Scooties',
 ];
+
+const PREFERRED_BRANDS = ['Toyota', 'Ford', 'Mercedes-Benz', 'Jeep', 'BMW', 'Audi'];
 
 const Home = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -39,8 +45,6 @@ const Home = () => {
   // Booking Form State
   const [bookingForm, setBookingForm] = useState({
     carType: 'All Types',
-    pickupLocation: 'Airport Terminal 1 & 3',
-    dropoffLocation: 'Airport Terminal 1 & 3',
     pickupDate: new Date().toISOString().split('T')[0],
     pickupTime: '10:00',
     returnDate: new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
@@ -69,6 +73,29 @@ const Home = () => {
     fetchVehicles();
   }, []);
 
+  // Ensure background video plays reliably and responds to mute/unmute
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          if (videoRef.current) {
+            videoRef.current.muted = true;
+            videoRef.current.play().catch(() => {});
+          }
+        });
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
+
   const handleFormChange = (e) => {
     setBookingForm({
       ...bookingForm,
@@ -80,20 +107,22 @@ const Home = () => {
     e.preventDefault();
     const query = new URLSearchParams({
       type: bookingForm.carType !== 'All Types' ? bookingForm.carType : '',
-      pickup: bookingForm.pickupLocation,
-      dropoff: bookingForm.dropoffLocation,
       from: bookingForm.pickupDate,
       to: bookingForm.returnDate,
     }).toString();
     navigate(`/vehicles?${query}`);
   };
 
-  // Filter vehicles on Home by category tab
-  const displayedVehicles = vehicles.filter((v) => {
+  // Filter vehicles on Home by category or brand tab
+  const filteredVehicles = vehicles.filter((v) => {
     if (activeCategory === 'All Vehicles') return true;
     if (activeCategory === 'Scooties') return v.vehicleType === 'scooty' || v.category === 'Scooties';
     if (activeCategory === 'Bikes') return v.vehicleType === 'bike' || v.category === 'Bikes';
     if (activeCategory === 'Electric') return v.fuelType === 'Electric';
+
+    // Direct brand matching for Toyota, Ford, Mercedes-Benz, Jeep, BMW, Audi
+    if (v.brand?.toLowerCase() === activeCategory.toLowerCase()) return true;
+
     return (
       v.category?.toLowerCase() === activeCategory.toLowerCase() ||
       v.vehicleType?.toLowerCase() === activeCategory.toLowerCase() ||
@@ -101,30 +130,46 @@ const Home = () => {
     );
   });
 
+  // Prioritize requested world-class brands on Home cards (Toyota, Ford, Mercedes-Benz, Jeep, BMW, Audi)
+  const displayedVehicles = [...filteredVehicles].sort((a, b) => {
+    const aMatch = PREFERRED_BRANDS.findIndex(
+      (br) => br.toLowerCase() === a.brand?.toLowerCase()
+    );
+    const bMatch = PREFERRED_BRANDS.findIndex(
+      (br) => br.toLowerCase() === b.brand?.toLowerCase()
+    );
+
+    if (aMatch !== -1 && bMatch !== -1) return aMatch - bMatch;
+    if (aMatch !== -1) return -1;
+    if (bMatch !== -1) return 1;
+    return 0;
+  });
+
   return (
     <div className="bg-white text-[#151515] overflow-hidden w-full">
       {/* ========================================================
           1. HERO SECTION (Full-Width Edge-to-Edge with Background Video)
           ======================================================== */}
-      <section className="relative w-full bg-[#1a0847] text-white overflow-hidden shadow-xl rounded-none">
+      <section className="relative w-full bg-[#0d0d12] text-white overflow-hidden shadow-xl rounded-none">
         {/* Background Video Player */}
         <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
           <video
             ref={videoRef}
             autoPlay
             loop
-            muted={isMuted}
+            muted
             playsInline
+            preload="auto"
             poster="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop"
-            className="w-full h-full object-cover object-center scale-105 transition-all duration-700"
+            className="w-full h-full object-cover object-center scale-100 transition-all duration-700"
           >
             <source src="/videos/hero-car.mp4" type="video/mp4" />
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-curved-road-41566-large.mp4" type="video/mp4" />
             <source src="https://res.cloudinary.com/demo/video/upload/blue_sports_car.mp4" type="video/mp4" />
           </video>
-          {/* Rich Gradient Overlays for High Contrast and Brand Styling */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/80" />
-          <div className="absolute inset-0 opacity-70 theme-hero-gradient mix-blend-multiply" />
-          <div className="absolute inset-0 bg-black/25 backdrop-blur-[0.5px]" />
+          {/* Clear Cinematic Overlays: Sports Car Video is vividly visible while text is crystal clear */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-black/45" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/20" />
         </div>
 
         {/* Subtle Background Glow Circles & Overlay */}
@@ -150,54 +195,93 @@ const Home = () => {
         <div className="container-fluid py-12 sm:py-16 lg:py-20 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-14 items-center">
             {/* Left Hero Content */}
-            <div className="lg:col-span-7 space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-7 space-y-6"
+            >
               {/* AI Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-xs font-semibold shadow-sm w-fit">
+              <motion.div
+                animate={{ y: [0, -5, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-xs font-semibold shadow-sm w-fit"
+              >
                 <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span>AI-Powered Smart Fleet • Instant Booking</span>
-              </div>
+              </motion.div>
 
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tight leading-[1.12] text-white font-heading">
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.1 }}
+                className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tight leading-[1.12] text-white font-heading"
+              >
                 Experience the road like never before
-              </h1>
+              </motion.h1>
 
-              <p className="text-white/90 text-sm sm:text-base lg:text-lg max-w-2xl leading-relaxed font-normal">
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2 }}
+                className="text-white/90 text-sm sm:text-base lg:text-lg max-w-2xl leading-relaxed font-normal"
+              >
                 Discover your perfect ride and enjoy every journey with comfort, flexibility, and convenience. Premium cars and scooties tailored for every destination.
-              </p>
+              </motion.p>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3.5 pt-2">
-                <Link
-                  to="/vehicles"
-                  className="px-6 py-3.5 rounded-xl bg-white text-brand-primary hover:bg-gray-100 font-bold text-sm tracking-wide shadow-md transition-all hover:scale-105"
-                >
-                  Explore Vehicles
-                </Link>
-                <a
-                  href="#booking-form"
-                  className="px-6 py-3.5 rounded-xl border border-white/40 text-white hover:bg-white/10 font-semibold text-sm tracking-wide transition-all"
-                >
-                  Book Your Car
-                </a>
-              </div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.3 }}
+                className="flex flex-wrap items-center gap-3.5 pt-2"
+              >
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Link
+                    to="/vehicles"
+                    className="px-6 py-3.5 rounded-xl bg-white text-brand-primary hover:bg-gray-100 font-bold text-sm tracking-wide shadow-md transition-all inline-block"
+                  >
+                    Explore Vehicles
+                  </Link>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <a
+                    href="#booking-form"
+                    className="px-6 py-3.5 rounded-xl border border-white/40 text-white hover:bg-white/10 font-semibold text-sm tracking-wide transition-all inline-block"
+                  >
+                    Book Your Car
+                  </a>
+                </motion.div>
+              </motion.div>
 
               {/* Feature Highlights Pills over the video */}
-              <div className="pt-2 flex flex-wrap items-center gap-3">
-                <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-xs text-white">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.4 }}
+                className="pt-2 flex flex-wrap items-center gap-3"
+              >
+                <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-xs text-white hover:bg-white/15 transition-colors">
                   <ShieldCheck className="w-4 h-4 text-emerald-300" />
                   <span className="font-semibold">Comprehensive Insurance</span>
                 </div>
-                <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-xs text-white">
+                <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-xs text-white hover:bg-white/15 transition-colors">
                   <CheckCircle2 className="w-4 h-4 text-emerald-300" />
                   <span className="font-semibold">Instant Digital Keys 24/7</span>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* Right: White Booking Form Card */}
-            <div id="booking-form" className="lg:col-span-5 flex justify-end">
-              <div className="bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-[#151515] shadow-2xl border border-white/30 w-full max-w-lg">
+            <motion.div
+              id="booking-form"
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-5 flex justify-end"
+            >
+              <div className="bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-[#151515] shadow-2xl border border-white/30 w-full max-w-lg hover:shadow-primary-glow/20 transition-all duration-300">
                 <h3 className="text-xl sm:text-2xl font-extrabold text-[#151515] mb-5 tracking-tight">
                   Book your car
                 </h3>
@@ -222,42 +306,6 @@ const Home = () => {
                         <option value="Scooty">Scooty / Two-Wheeler</option>
                         <option value="Electric">Electric (EV)</option>
                       </select>
-                    </div>
-                  </div>
-
-                  {/* Pickup Location */}
-                  <div>
-                    <label className="block text-[11px] font-bold text-[#777777] uppercase tracking-wider mb-1">
-                      Pick-up location
-                    </label>
-                    <div className="relative">
-                      <MapPin className="w-4 h-4 text-brand-primary absolute left-3 top-3 pointer-events-none" />
-                      <input
-                        type="text"
-                        name="pickupLocation"
-                        value={bookingForm.pickupLocation}
-                        onChange={handleFormChange}
-                        placeholder="Enter City or Airport"
-                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#EAEAEA] bg-[#F8F8FA] text-[#151515] text-xs font-semibold focus:outline-none focus:border-brand-primary"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Drop-off Location */}
-                  <div>
-                    <label className="block text-[11px] font-bold text-[#777777] uppercase tracking-wider mb-1">
-                      Drop-off location
-                    </label>
-                    <div className="relative">
-                      <MapPin className="w-4 h-4 text-brand-primary absolute left-3 top-3 pointer-events-none" />
-                      <input
-                        type="text"
-                        name="dropoffLocation"
-                        value={bookingForm.dropoffLocation}
-                        onChange={handleFormChange}
-                        placeholder="Enter City or Airport"
-                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#EAEAEA] bg-[#F8F8FA] text-[#151515] text-xs font-semibold focus:outline-none focus:border-brand-primary"
-                      />
                     </div>
                   </div>
 
@@ -331,17 +379,19 @@ const Home = () => {
 
                   {/* Submit Button */}
                   <div className="pt-2">
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       type="submit"
-                      className="w-full py-3.5 px-4 rounded-xl bg-brand-primary hover:bg-brand-primaryHover text-white font-bold text-sm tracking-wide shadow-md transition-all hover:shadow-lg flex items-center justify-center gap-2"
+                      className="w-full py-3.5 px-4 rounded-xl btn-theme-gradient shine-sweep text-white font-bold text-sm tracking-wide shadow-primary-glow transition-all flex items-center justify-center gap-2"
                     >
                       <Search className="w-4 h-4" />
                       <span>Find your car</span>
-                    </button>
+                    </motion.button>
                   </div>
                 </form>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -352,33 +402,39 @@ const Home = () => {
       <section className="container-fluid py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           {/* Feature 1: Availability */}
-          <div className="flex flex-col items-center text-center p-6 sm:p-8 rounded-2xl bg-[#F8F8FA] border border-[#EAEAEA] hover:border-brand-primary/40 transition-all hover:shadow-md">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-brand-primaryLight text-brand-primary flex items-center justify-center mb-3">
-              <Car className="w-7 h-7 sm:w-8 sm:h-8" />
+          <div className="card-animated-premium p-6 sm:p-8 flex flex-col items-center text-center group">
+            <div className="w-16 h-16 rounded-2xl bg-brand-primaryLight text-brand-primary flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-sm">
+              <Car className="w-8 h-8" />
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-[#151515] mb-1.5 font-heading">Availability</h3>
+            <h3 className="text-lg sm:text-xl font-bold text-[#151515] group-hover:text-brand-primary transition-colors mb-2 font-heading">
+              Availability
+            </h3>
             <p className="text-xs sm:text-sm text-[#777777] leading-relaxed max-w-sm">
-              Wide selection of vehicles ready for immediate pickup across airport hubs and city stations.
+              Wide selection of vehicles ready for immediate pickup across city stations and premium mobility hubs.
             </p>
           </div>
 
           {/* Feature 2: Comfort */}
-          <div className="flex flex-col items-center text-center p-6 sm:p-8 rounded-2xl bg-[#F8F8FA] border border-[#EAEAEA] hover:border-brand-primary/40 transition-all hover:shadow-md">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-brand-primaryLight text-brand-primary flex items-center justify-center mb-3">
-              <ShieldCheck className="w-7 h-7 sm:w-8 sm:h-8" />
+          <div className="card-animated-premium p-6 sm:p-8 flex flex-col items-center text-center group">
+            <div className="w-16 h-16 rounded-2xl bg-brand-primaryLight text-brand-primary flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-sm">
+              <ShieldCheck className="w-8 h-8" />
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-[#151515] mb-1.5 font-heading">Comfort</h3>
+            <h3 className="text-lg sm:text-xl font-bold text-[#151515] group-hover:text-brand-primary transition-colors mb-2 font-heading">
+              Comfort
+            </h3>
             <p className="text-xs sm:text-sm text-[#777777] leading-relaxed max-w-sm">
               Pristine sanitization, executive seats, climate control, and smooth automatic transmissions.
             </p>
           </div>
 
           {/* Feature 3: Savings */}
-          <div className="flex flex-col items-center text-center p-6 sm:p-8 rounded-2xl bg-[#F8F8FA] border border-[#EAEAEA] hover:border-brand-primary/40 transition-all hover:shadow-md">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-brand-primaryLight text-brand-primary flex items-center justify-center mb-3">
-              <BadgePercent className="w-7 h-7 sm:w-8 sm:h-8" />
+          <div className="card-animated-premium p-6 sm:p-8 flex flex-col items-center text-center group">
+            <div className="w-16 h-16 rounded-2xl bg-brand-primaryLight text-brand-primary flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-sm">
+              <BadgePercent className="w-8 h-8" />
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-[#151515] mb-1.5 font-heading">Savings</h3>
+            <h3 className="text-lg sm:text-xl font-bold text-[#151515] group-hover:text-brand-primary transition-colors mb-2 font-heading">
+              Savings
+            </h3>
             <p className="text-xs sm:text-sm text-[#777777] leading-relaxed max-w-sm">
               Transparent daily pricing, zero hidden fees, flexible packages, and complimentary insurance.
             </p>
@@ -462,9 +518,20 @@ const Home = () => {
       </section>
 
       {/* ========================================================
+          BRAND MARQUEE: DUAL DIRECTION (LEFT-TO-RIGHT & RIGHT-TO-LEFT)
+          ======================================================== */}
+      <BrandMarquee
+        onSelectBrand={(brandName) => {
+          setActiveCategory(brandName);
+          const el = document.getElementById('fleet-section');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }}
+      />
+
+      {/* ========================================================
           4. CHOOSE YOUR VEHICLE WITH TIGHT TABS SPACING
           ======================================================== */}
-      <section className="container-fluid pt-2 pb-6 sm:pt-4 sm:pb-8">
+      <section id="fleet-section" className="container-fluid pt-8 pb-6 sm:pt-10 sm:pb-8">
         {/* Heading & View All */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-2 sm:mb-3">
           <div>
@@ -485,27 +552,32 @@ const Home = () => {
           </Link>
         </div>
 
-        {/* Category Tabs: Tight gap to the vehicle grid */}
-        <div className="flex items-center flex-wrap gap-2 mb-3">
+        {/* Category Tabs: Tight gap to the vehicle grid with animated layoutId pill */}
+        <div className="flex items-center flex-wrap gap-2 mb-4">
           {HOME_CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat;
             return (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  isActive
-                    ? 'bg-brand-primary text-white shadow-sm'
-                    : 'bg-[#F8F8FA] text-[#777777] hover:bg-gray-200 hover:text-[#151515]'
+                className={`relative px-4 py-2 rounded-full text-xs font-bold transition-colors ${
+                  isActive ? 'text-white' : 'text-[#777777] hover:text-[#151515] bg-[#F8F8FA]'
                 }`}
               >
-                {cat}
+                {isActive && (
+                  <motion.div
+                    layoutId="activeCategoryPill"
+                    className="absolute inset-0 bg-brand-primary rounded-full shadow-sm -z-10"
+                    transition={{ type: 'spring', stiffness: 450, damping: 32 }}
+                  />
+                )}
+                <span>{cat}</span>
               </button>
             );
           })}
         </div>
 
-        {/* Vehicle Grid */}
+        {/* Vehicle Grid with Staggered Entrance */}
         {loading ? (
           <div className="py-16 flex justify-center">
             <LoadingSpinner size="lg" />
@@ -523,11 +595,35 @@ const Home = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {displayedVehicles.slice(0, 9).map((vehicle) => (
-              <VehicleCard key={vehicle._id} vehicle={vehicle} />
-            ))}
-          </div>
+          <>
+            <motion.div
+              layout
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5 items-stretch"
+            >
+              {displayedVehicles.slice(0, 5).map((vehicle, idx) => (
+                <motion.div
+                  key={vehicle._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: idx * 0.05 }}
+                  className="h-full"
+                >
+                  <VehicleCard vehicle={vehicle} />
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Explore All Link / Button Below the 5 Cards */}
+            <div className="text-center mt-8">
+              <Link
+                to="/vehicles"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#F8F8FA] hover:bg-brand-primary text-[#151515] hover:text-white border border-[#EAEAEA] font-bold text-xs tracking-wider uppercase transition-all shadow-sm hover:shadow-md"
+              >
+                <span>Explore Full Fleet ({displayedVehicles.length} Vehicles)</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </>
         )}
       </section>
 

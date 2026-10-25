@@ -29,7 +29,7 @@ const AddVehicle = () => {
     registrationYear: '2024',
     ac: true,
     helmetAvailable: false,
-    pickupLocation: 'Airport Terminal 1 & 3, Aerocity Hub, City Center Hub',
+    pickupLocation: 'Aerocity Hub, City Center Hub',
     status: 'active',
   });
 

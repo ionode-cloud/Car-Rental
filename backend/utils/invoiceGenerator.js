@@ -77,16 +77,17 @@ export const generateInvoicePDF = (booking, res) => {
 
   doc.moveDown(1.5);
 
-  const vehicleName = booking.vehicle?.name || `${booking.vehicleType.toUpperCase()} Rental`;
+  const vType = (booking.vehicleType || 'vehicle').toUpperCase();
+  const vehicleName = booking.vehicle?.name || `${vType} Rental`;
   const vehicleBrand = booking.vehicle?.brand || '';
 
   doc
     .fontSize(9)
     .fillColor('#333333')
-    .text(`Vehicle: ${vehicleBrand} ${vehicleName}`, 60)
-    .text(`Vehicle Type: ${booking.vehicleType.toUpperCase()}`)
-    .text(`Pickup: ${new Date(booking.pickupDate).toLocaleDateString('en-IN')} ${booking.pickupTime || ''} (${booking.pickupLocation})`)
-    .text(`Return: ${new Date(booking.returnDate).toLocaleDateString('en-IN')} ${booking.returnTime || ''} (${booking.returnLocation})`)
+    .text(`Vehicle: ${vehicleBrand ? `${vehicleBrand} ` : ''}${vehicleName}`, 60)
+    .text(`Vehicle Type: ${vType}`)
+    .text(`Pickup: ${booking.pickupDate ? new Date(booking.pickupDate).toLocaleDateString('en-IN') : 'Scheduled'} ${booking.pickupTime || ''} (${booking.pickupLocation || 'Main Hub'})`)
+    .text(`Return: ${booking.returnDate ? new Date(booking.returnDate).toLocaleDateString('en-IN') : 'Scheduled'} ${booking.returnTime || ''} (${booking.returnLocation || 'Main Hub'})`)
     .text(`Total Duration: ${booking.rentalDuration?.days || 1} Days`);
 
   doc.moveDown(2);
@@ -171,7 +172,7 @@ export const generateInvoicePDF = (booking, res) => {
   doc
     .fillColor('#FF6B00')
     .fontSize(12)
-    .text(`TOTAL AMOUNT: ₹${booking.totalAmount.toLocaleString('en-IN')}`, 320, curY + 8);
+    .text(`TOTAL AMOUNT: ₹${(booking.totalAmount || 0).toLocaleString('en-IN')}`, 320, curY + 8);
 
   curY += 50;
 
