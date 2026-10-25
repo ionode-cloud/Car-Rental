@@ -246,7 +246,7 @@ const AdminBookings = () => {
                             Manage
                           </button>
                           <a
-                            href={`/api/bookings/${b._id}/invoice`}
+                            href={`${import.meta.env.VITE_API_URL || '/api'}/bookings/${b._id}/invoice`}
                             target="_blank"
                             rel="noreferrer"
                             className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white"

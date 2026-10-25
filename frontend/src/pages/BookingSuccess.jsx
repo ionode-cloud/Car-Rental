@@ -55,7 +55,8 @@ const BookingSuccess = () => {
     );
   }
 
-  const invoiceUrl = `/api/bookings/${booking._id}/invoice`;
+  const apiBase = import.meta.env.VITE_API_URL || '/api';
+  const invoiceUrl = `${apiBase}/bookings/${booking._id}/invoice`;
 
   return (
     <div className="min-h-screen bg-brand-black text-white pt-24 pb-20">

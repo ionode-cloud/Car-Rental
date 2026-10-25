@@ -97,7 +97,8 @@ const MyBookings = () => {
     try {
       setDownloadingId(bookingId);
       setActionError('');
-      const response = await fetch(`/api/bookings/${bookingId}/invoice`, {
+      const apiBase = import.meta.env.VITE_API_URL || '/api';
+      const response = await fetch(`${apiBase}/bookings/${bookingId}/invoice`, {
         method: 'GET',
         credentials: 'include',
       });
@@ -123,7 +124,8 @@ const MyBookings = () => {
     try {
       setDownloadingId(bookingId);
       setActionError('');
-      const response = await fetch(`/api/bookings/${bookingId}/invoice`, {
+      const apiBase = import.meta.env.VITE_API_URL || '/api';
+      const response = await fetch(`${apiBase}/bookings/${bookingId}/invoice`, {
         method: 'GET',
         credentials: 'include',
       });
