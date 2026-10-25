@@ -198,7 +198,7 @@ const VehicleDetails = () => {
               </h3>
 
               {/* 3x2 Grid of Spec Cards */}
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3">
                 {techSpecs.map((spec, idx) => {
                   const Icon = spec.icon;
                   return (

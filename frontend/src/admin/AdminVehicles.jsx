@@ -131,11 +131,11 @@ const AdminVehicles = () => {
           <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
         </form>
 
-        <div className="flex items-center gap-3 w-full md:w-auto">
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 sm:gap-3 w-full md:w-auto">
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="bg-brand-dark border border-white/15 rounded-xl px-3 py-2 text-xs text-white focus:outline-none cursor-pointer"
+            className="flex-1 sm:flex-initial bg-brand-dark border border-white/15 rounded-xl px-3 py-2 text-xs text-white focus:outline-none cursor-pointer"
           >
             <option value="all">All Vehicle Types</option>
             <option value="car">Cars Only</option>
@@ -145,7 +145,7 @@ const AdminVehicles = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-brand-dark border border-white/15 rounded-xl px-3 py-2 text-xs text-white focus:outline-none cursor-pointer"
+            className="flex-1 sm:flex-initial bg-brand-dark border border-white/15 rounded-xl px-3 py-2 text-xs text-white focus:outline-none cursor-pointer"
           >
             <option value="all">All Statuses</option>
             <option value="active">Active Only</option>

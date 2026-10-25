@@ -65,8 +65,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F8FA] flex items-center justify-center px-4 py-20 relative">
-      <div className="w-full max-w-md bg-white p-8 sm:p-10 rounded-3xl border border-[#EAEAEA] relative z-10 shadow-xl">
+    <div className="min-h-screen bg-[#F8F8FA] flex items-center justify-center px-3 sm:px-4 py-16 sm:py-20 relative">
+      <div className="w-full max-w-md bg-white p-5 sm:p-8 sm:p-10 rounded-3xl border border-[#EAEAEA] relative z-10 shadow-xl">
         {/* Brand Header */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-4 group">

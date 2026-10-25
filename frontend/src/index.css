@@ -75,6 +75,15 @@ html[data-theme="purple"],
   ::-webkit-scrollbar-thumb:hover {
     background: var(--primary);
   }
+
+  /* No Scrollbar Utility */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 @layer utilities {

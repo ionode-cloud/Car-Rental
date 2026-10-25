@@ -81,12 +81,12 @@ const AdminDashboard = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 bg-brand-dark p-1 rounded-2xl border border-white/10 self-start sm:self-auto">
+        <div className="flex items-center gap-1 sm:gap-2 bg-brand-dark p-1 rounded-2xl border border-white/10 overflow-x-auto no-scrollbar max-w-full self-start sm:self-auto">
           {['today', '7days', '30days', 'month'].map((f) => (
             <button
               key={f}
               onClick={() => setTimeFilter(f)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold capitalize transition-all ${
+              className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold capitalize whitespace-nowrap transition-all ${
                 timeFilter === f
                   ? 'bg-brand-primary text-white shadow-primary-glow'
                   : 'text-gray-400 hover:text-white'
@@ -105,7 +105,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* KPI Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Total Revenue */}
         <div className="glass-panel p-5 rounded-2xl border border-white/10 relative overflow-hidden">
           <div className="flex items-center justify-between">
@@ -203,7 +203,7 @@ const AdminDashboard = () => {
             </span>
           </div>
 
-          <div className="h-72 w-full pt-4">
+          <div className="h-60 sm:h-72 w-full pt-4">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={revenueChartData}>
                 <defs>
@@ -244,7 +244,7 @@ const AdminDashboard = () => {
             <p className="text-xs text-gray-400">Vehicle volume by category classification</p>
           </div>
 
-          <div className="h-72 w-full flex items-center justify-center">
+          <div className="h-60 sm:h-72 w-full flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie

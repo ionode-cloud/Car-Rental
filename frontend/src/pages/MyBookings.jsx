@@ -259,7 +259,7 @@ const MyBookings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F6FA] text-[#151515] pt-16 sm:pt-20 pb-20 selection:bg-brand-primary selection:text-white">
+    <div className="min-h-screen bg-[#F5F6FA] text-[#151515] pt-16 sm:pt-20 pb-28 sm:pb-20 selection:bg-brand-primary selection:text-white">
       {/* Decorative ambient subtle background gradients */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden z-0">
         <div className="absolute -top-40 right-1/4 w-96 h-96 bg-brand-primary/5 rounded-full blur-3xl" />
@@ -481,12 +481,12 @@ const MyBookings = () => {
 
           {/* Bookings-Specific Subfilters & Search */}
           {activeTab === 'bookings' && (
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full md:w-auto">
               {/* Status Pills */}
-              <div className="flex items-center bg-[#F4F5F9] p-1 rounded-xl border border-gray-150 text-xs font-semibold">
+              <div className="flex items-center bg-[#F4F5F9] p-1 rounded-xl border border-gray-150 text-xs font-semibold overflow-x-auto no-scrollbar max-w-full">
                 <button
                   onClick={() => setStatusFilter('all')}
-                  className={`px-3 py-1 rounded-lg transition-all ${
+                  className={`px-3 py-1 rounded-lg whitespace-nowrap transition-all ${
                     statusFilter === 'all'
                       ? 'bg-white text-[#151515] shadow-xs font-bold'
                       : 'text-gray-500 hover:text-[#151515]'
@@ -496,7 +496,7 @@ const MyBookings = () => {
                 </button>
                 <button
                   onClick={() => setStatusFilter('upcoming')}
-                  className={`px-3 py-1 rounded-lg transition-all ${
+                  className={`px-3 py-1 rounded-lg whitespace-nowrap transition-all ${
                     statusFilter === 'upcoming'
                       ? 'bg-white text-emerald-700 shadow-xs font-bold'
                       : 'text-gray-500 hover:text-[#151515]'
@@ -506,7 +506,7 @@ const MyBookings = () => {
                 </button>
                 <button
                   onClick={() => setStatusFilter('completed')}
-                  className={`px-3 py-1 rounded-lg transition-all ${
+                  className={`px-3 py-1 rounded-lg whitespace-nowrap transition-all ${
                     statusFilter === 'completed'
                       ? 'bg-white text-blue-700 shadow-xs font-bold'
                       : 'text-gray-500 hover:text-[#151515]'
@@ -516,7 +516,7 @@ const MyBookings = () => {
                 </button>
                 <button
                   onClick={() => setStatusFilter('cancelled')}
-                  className={`px-3 py-1 rounded-lg transition-all ${
+                  className={`px-3 py-1 rounded-lg whitespace-nowrap transition-all ${
                     statusFilter === 'cancelled'
                       ? 'bg-white text-rose-700 shadow-xs font-bold'
                       : 'text-gray-500 hover:text-[#151515]'
@@ -527,7 +527,7 @@ const MyBookings = () => {
               </div>
 
               {/* Search Input */}
-              <div className="relative min-w-[180px] sm:min-w-[220px]">
+              <div className="relative w-full sm:w-56 md:w-60">
                 <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
@@ -668,10 +668,10 @@ const MyBookings = () => {
                       </div>
 
                       {/* Card Main Body Grid */}
-                      <div className="p-6 sm:p-7 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                      <div className="p-4 sm:p-6 lg:p-7 grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-center">
                         {/* 1. Vehicle Showcase (Col 1-4) */}
-                        <div className="lg:col-span-4 flex sm:flex-row lg:flex-col gap-4 items-center sm:items-start lg:items-stretch">
-                          <div className="relative w-36 sm:w-44 lg:w-full h-24 sm:h-28 lg:h-40 rounded-2xl overflow-hidden bg-gray-100 border border-gray-150 shrink-0 shadow-inner group">
+                        <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-4 items-stretch sm:items-start lg:items-stretch">
+                          <div className="relative w-full sm:w-48 lg:w-full h-44 sm:h-32 lg:h-40 rounded-2xl overflow-hidden bg-gray-100 border border-gray-150 shrink-0 shadow-inner group">
                             <img
                               src={vehicleImg}
                               alt={vehicleName}
@@ -771,7 +771,7 @@ const MyBookings = () => {
                         </div>
 
                         {/* 3. Financials & Actions Center (Col 9-12) */}
-                        <div className="lg:col-span-3 flex flex-col justify-between h-full space-y-4 lg:border-l lg:border-gray-150 lg:pl-6">
+                        <div className="lg:col-span-3 flex flex-col justify-between h-full space-y-4 pt-4 lg:pt-0 border-t lg:border-t-0 lg:border-l border-gray-150 lg:pl-6">
                           <div>
                             <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">
                               Total Amount

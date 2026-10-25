@@ -43,11 +43,11 @@ const ScrollToTop = () => {
           whileHover={{ scale: 1.15, y: -3 }}
           whileTap={{ scale: 0.9 }}
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full btn-theme-gradient text-white flex items-center justify-center shadow-primary-glow border border-white/30 backdrop-blur-md cursor-pointer group"
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full btn-theme-gradient text-white flex items-center justify-center shadow-primary-glow border border-white/30 backdrop-blur-md cursor-pointer group"
           title="Scroll to Top"
           aria-label="Scroll to top of page"
         >
-          <ArrowUp className="w-5 h-5 transform group-hover:-translate-y-0.5 transition-transform duration-200" />
+          <ArrowUp className="w-4 h-4 sm:w-5 sm:h-5 transform group-hover:-translate-y-0.5 transition-transform duration-200" />
         </motion.button>
       )}
     </AnimatePresence>
