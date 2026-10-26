@@ -479,17 +479,33 @@ const Home = () => {
               layout
               className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-5 items-stretch"
             >
-              {displayedVehicles.slice(0, 6).map((vehicle, idx) => (
-                <motion.div
-                  key={vehicle._id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: idx * 0.05 }}
-                  className="h-full"
-                >
-                  <VehicleCard vehicle={vehicle} />
-                </motion.div>
-              ))}
+              {displayedVehicles.slice(0, 10).map((vehicle, idx) => {
+                // Responsive visibility to ensure exactly 2 complete rows across all screen breakpoints:
+                // Mobile (2 cols): 2 rows = 4 cards
+                // Tablet md (3 cols): 2 rows = 6 cards
+                // Laptop lg (4 cols): 2 rows = 8 cards
+                // Desktop xl (5 cols): 2 rows = 10 cards
+                const visibilityClass =
+                  idx < 4
+                    ? 'block'
+                    : idx < 6
+                    ? 'hidden md:block'
+                    : idx < 8
+                    ? 'hidden lg:block'
+                    : 'hidden xl:block';
+
+                return (
+                  <motion.div
+                    key={vehicle._id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: idx * 0.04 }}
+                    className={`h-full ${visibilityClass}`}
+                  >
+                    <VehicleCard vehicle={vehicle} />
+                  </motion.div>
+                );
+              })}
             </motion.div>
 
             {/* Explore All Link / Button Below the 6 Cards */}
