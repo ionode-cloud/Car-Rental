@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles } from 'lucide-react';
 
 // Reliable Vector Logos for Toyota, Ford, Mercedes-Benz, Jeep, BMW, Audi
 const BRAND_ICONS = {
@@ -100,24 +99,10 @@ const BrandMarquee = ({ onSelectBrand }) => {
   const rowTwoItems = [...ROW_TWO_BRANDS, ...ROW_TWO_BRANDS, ...ROW_TWO_BRANDS, ...ROW_TWO_BRANDS];
 
   return (
-    <section className="w-full py-5 sm:py-6 bg-[#FAFAFC] border-y border-[#ECECF2] overflow-hidden relative">
+    <section className="w-full py-3 sm:py-3.5 bg-[#FAFAFC] border-y border-[#ECECF2] overflow-hidden relative">
       {/* Edge Gradient Fades for Smooth Infinite Illusion */}
       <div className="absolute top-0 bottom-0 left-0 w-12 sm:w-24 bg-gradient-to-r from-[#FAFAFC] to-transparent z-10 pointer-events-none" />
       <div className="absolute top-0 bottom-0 right-0 w-12 sm:w-24 bg-gradient-to-l from-[#FAFAFC] to-transparent z-10 pointer-events-none" />
-
-      {/* Header Info */}
-      <div className="container-fluid mb-3.5 text-center">
-        <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-brand-primary/10 text-brand-primary text-[11px] font-bold uppercase tracking-wider mb-1">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Premier Automotive Fleet</span>
-        </div>
-        <h3 className="text-lg sm:text-xl font-black text-[#151515] font-heading">
-          Featured Global Automakers
-        </h3>
-        <p className="text-[11px] text-[#777777] mt-0.5">
-          Select any brand to instantly explore world-class engineering & self-drive rentals
-        </p>
-      </div>
 
       {/* ==================== LINE 1: GOES RIGHT TO LEFT (←) ==================== */}
       <div className="overflow-hidden mb-2.5 flex">
