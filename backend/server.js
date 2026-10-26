@@ -142,7 +142,16 @@ app.use(
   })
 );
 
-// Root Health Check
+// Root Health Check & Base Ping
+app.get('/', (req, res) => {
+  res.json({
+    status: 'online',
+    appName: 'RideVista Mobility API',
+    health: '/api/health',
+    timestamp: new Date().toISOString(),
+  });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',

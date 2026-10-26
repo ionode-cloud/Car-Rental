@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { vehicleService } from '../services/vehicleService';
 import { useBooking } from '../context/BookingContext';
 import VehicleCard from '../components/VehicleCard';
@@ -20,6 +21,7 @@ const scootyCategories = ['All', 'Electric Scooty', 'Premium Scooty', 'Standard 
 const fuelTypes = ['All', 'Electric', 'Petrol'];
 
 const ScootyRental = () => {
+  const [searchParams] = useSearchParams();
   const { searchFilters } = useBooking();
 
   const [vehicles, setVehicles] = useState([]);
@@ -28,13 +30,20 @@ const ScootyRental = () => {
   const [totalCount, setTotalCount] = useState(0);
 
   // Filters State
-  const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('All');
+  const [search, setSearch] = useState(searchParams.get('search') || '');
+  const [category, setCategory] = useState(searchParams.get('category') || 'All');
   const [fuelType, setFuelType] = useState('All');
   const [maxPrice, setMaxPrice] = useState(2000);
   const [sort, setSort] = useState('popular');
   const [page, setPage] = useState(1);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+
+  useEffect(() => {
+    const q = searchParams.get('search');
+    if (q !== null) setSearch(q);
+    const cat = searchParams.get('category');
+    if (cat) setCategory(cat);
+  }, [searchParams]);
 
   const fetchScooties = async () => {
     setLoading(true);

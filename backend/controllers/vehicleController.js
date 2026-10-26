@@ -1,5 +1,6 @@
 import Vehicle from '../models/Vehicle.js';
 import Booking from '../models/Booking.js';
+import { escapeRegex } from '../utils/escapeRegex.js';
 
 /**
  * @desc    Get all vehicles with comprehensive filtering, sorting & pagination
@@ -48,7 +49,7 @@ export const getVehicles = async (req, res) => {
     }
 
     if (brand && brand !== 'all') {
-      query.brand = new RegExp(brand, 'i');
+      query.brand = new RegExp(escapeRegex(brand), 'i');
     }
 
     if (minPrice || maxPrice) {
@@ -58,7 +59,7 @@ export const getVehicles = async (req, res) => {
     }
 
     if (search && search.trim() !== '') {
-      const regex = new RegExp(search.trim(), 'i');
+      const regex = new RegExp(escapeRegex(search.trim()), 'i');
       query.$or = [{ name: regex }, { brand: regex }, { model: regex }, { category: regex }];
     }
 

@@ -30,8 +30,8 @@ const CarRental = () => {
   const [totalCount, setTotalCount] = useState(0);
 
   // Filters State
-  const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('All');
+  const [search, setSearch] = useState(searchParams.get('search') || '');
+  const [category, setCategory] = useState(searchParams.get('category') || 'All');
   const [fuelType, setFuelType] = useState('All');
   const [transmission, setTransmission] = useState('All');
   const [seatingCapacity, setSeatingCapacity] = useState('All');
@@ -39,6 +39,13 @@ const CarRental = () => {
   const [sort, setSort] = useState('popular');
   const [page, setPage] = useState(1);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+
+  useEffect(() => {
+    const q = searchParams.get('search');
+    if (q !== null) setSearch(q);
+    const cat = searchParams.get('category');
+    if (cat) setCategory(cat);
+  }, [searchParams]);
 
   const fetchCars = async () => {
     setLoading(true);

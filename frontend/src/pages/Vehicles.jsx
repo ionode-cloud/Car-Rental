@@ -25,10 +25,31 @@ const Vehicles = () => {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(
-    searchParams.get('category') || searchParams.get('type') || 'All Vehicles'
+    searchParams.get('category') ||
+      searchParams.get('brand') ||
+      searchParams.get('type') ||
+      'All Vehicles'
   );
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [sortBy, setSortBy] = useState('popular');
+
+  // Synchronize state with URL parameters when navigating from external links or Marquee
+  useEffect(() => {
+    const cat =
+      searchParams.get('category') ||
+      searchParams.get('brand') ||
+      searchParams.get('type');
+    if (cat) {
+      setSelectedCategory(cat);
+    } else if (!searchParams.has('category') && !searchParams.has('brand') && !searchParams.has('type')) {
+      setSelectedCategory('All Vehicles');
+    }
+
+    const q = searchParams.get('search');
+    if (q !== null) {
+      setSearchTerm(q);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -59,8 +80,7 @@ const Vehicles = () => {
       } else if (selectedCategory === 'Electric') {
         if (v.fuelType !== 'Electric') return false;
       } else if (v.brand?.toLowerCase() === selectedCategory.toLowerCase()) {
-        // Direct brand match (Toyota, Ford, Mercedes-Benz, Jeep, BMW, Audi)
-        return true;
+        // Direct brand match (Toyota, Ford, Mercedes-Benz, Jeep, BMW, Audi) - proceed to search check
       } else {
         const matchesCategory =
           v.category?.toLowerCase() === selectedCategory.toLowerCase() ||
@@ -94,8 +114,11 @@ const Vehicles = () => {
     setSelectedCategory(category);
     if (category === 'All Vehicles') {
       searchParams.delete('category');
+      searchParams.delete('brand');
       searchParams.delete('type');
     } else {
+      searchParams.delete('brand');
+      searchParams.delete('type');
       searchParams.set('category', category);
     }
     setSearchParams(searchParams);

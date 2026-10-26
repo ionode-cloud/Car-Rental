@@ -281,15 +281,15 @@ const VehicleDetails = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-8"
+            className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6"
           >
-            {(similarVehicles.length > 0 ? similarVehicles : []).slice(0, 3).map((car, idx) => (
+            {(similarVehicles.length > 0 ? similarVehicles : []).slice(0, 4).map((car, idx) => (
               <motion.div
                 key={car._id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: idx * 0.15, duration: 0.4 }}
+                transition={{ delay: idx * 0.1, duration: 0.4 }}
               >
                 <VehicleCard vehicle={car} />
               </motion.div>

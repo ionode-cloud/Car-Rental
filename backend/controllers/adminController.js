@@ -6,6 +6,7 @@ import Package from '../models/Package.js';
 import Service from '../models/Service.js';
 import Review from '../models/Review.js';
 import Contact from '../models/Contact.js';
+import { escapeRegex } from '../utils/escapeRegex.js';
 
 // ==================== DASHBOARD ANALYTICS ====================
 
@@ -139,7 +140,7 @@ export const getAdminVehicles = async (req, res) => {
     const query = {};
 
     if (search) {
-      const regex = new RegExp(search, 'i');
+      const regex = new RegExp(escapeRegex(search), 'i');
       query.$or = [{ name: regex }, { brand: regex }, { model: regex }];
     }
     if (category && category !== 'all') query.category = category;
@@ -253,7 +254,7 @@ export const getAdminBookings = async (req, res) => {
     if (vehicleType && vehicleType !== 'all') query.vehicleType = vehicleType;
 
     if (search) {
-      const regex = new RegExp(search, 'i');
+      const regex = new RegExp(escapeRegex(search), 'i');
       query.$or = [
         { bookingReference: regex },
         { 'customerDetails.name': regex },
@@ -320,7 +321,7 @@ export const getAdminCustomers = async (req, res) => {
     const query = { role: 'customer' };
 
     if (search) {
-      const regex = new RegExp(search, 'i');
+      const regex = new RegExp(escapeRegex(search), 'i');
       query.$or = [{ name: regex }, { email: regex }, { phone: regex }];
     }
 
