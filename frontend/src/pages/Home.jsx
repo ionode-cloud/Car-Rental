@@ -113,6 +113,17 @@ const Home = () => {
     navigate(`/vehicles?${query}`);
   };
 
+  const [promoSearchText, setPromoSearchText] = useState('');
+
+  const handlePromoSearch = (e) => {
+    e.preventDefault();
+    if (promoSearchText.trim()) {
+      navigate(`/vehicles?search=${encodeURIComponent(promoSearchText.trim())}`);
+    } else {
+      navigate('/vehicles');
+    }
+  };
+
   // Filter vehicles on Home by category or brand tab
   const filteredVehicles = vehicles.filter((v) => {
     if (activeCategory === 'All Vehicles') return true;
@@ -659,9 +670,11 @@ const Home = () => {
               </p>
 
               {/* Input + Search Button */}
-              <form onSubmit={handleFindCar} className="flex max-w-md items-center gap-2 pt-2">
+              <form onSubmit={handlePromoSearch} className="flex max-w-md items-center gap-2 pt-2">
                 <input
                   type="text"
+                  value={promoSearchText}
+                  onChange={(e) => setPromoSearchText(e.target.value)}
                   placeholder="Enter your destination or car name..."
                   className="w-full px-4 py-3 rounded-xl bg-white text-[#151515] text-xs font-medium focus:outline-none placeholder-gray-400"
                 />

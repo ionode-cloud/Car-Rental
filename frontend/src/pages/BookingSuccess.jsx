@@ -55,8 +55,9 @@ const BookingSuccess = () => {
     );
   }
 
-  const apiBase = import.meta.env.VITE_API_URL || '/api';
-  const invoiceUrl = `${apiBase}/bookings/${booking._id}/invoice`;
+  const apiBase = (import.meta.env.VITE_API_URL || '/api').replace(/\/+$/, '');
+  const token = localStorage.getItem('ridevista_token');
+  const invoiceUrl = `${apiBase}/bookings/${booking._id}/invoice${token ? `?token=${encodeURIComponent(token)}` : ''}`;
 
   return (
     <div className="min-h-screen bg-brand-black text-white pt-24 pb-20">

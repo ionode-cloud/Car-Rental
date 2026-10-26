@@ -131,6 +131,7 @@ export const logout = (req, res) => {
     httpOnly: true,
     secure: isProduction,
     sameSite: isProduction ? 'none' : 'lax',
+    path: '/',
     expires: new Date(0),
   });
 

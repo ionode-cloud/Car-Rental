@@ -33,11 +33,18 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Trust reverse proxy (Cloudflare & Render load balancers for HTTPS detection)
+app.set('trust proxy', 1);
+
 // Connect to MongoDB and ensure data is primed
-connectDB().then(async () => {
-  await autoSeedIfEmpty();
-  await ensureFullFleetInDatabase();
-});
+connectDB()
+  .then(async () => {
+    await autoSeedIfEmpty();
+    await ensureFullFleetInDatabase();
+  })
+  .catch((err) => {
+    console.error('⚠️ Database priming error on startup:', err.message);
+  });
 
 // Security and utility middleware
 app.use(
@@ -103,7 +110,8 @@ const corsOptions = {
       // Returning true reflects the caller's origin header, ensuring withCredentials: true works cleanly
       callback(null, true);
     } else {
-      callback(new Error(`CORS blocked for origin: ${origin}`));
+      // Disallow origin cleanly without triggering an unhandled 500 internal server error
+      callback(null, false);
     }
   },
   credentials: true,
@@ -124,8 +132,15 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
 
-// Static folder for file uploads
-app.use('/public', express.static(path.join(__dirname, 'public')));
+// Static folder for file uploads with cross-origin resource policy
+app.use(
+  '/public',
+  express.static(path.join(__dirname, 'public'), {
+    setHeaders: (res) => {
+      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    },
+  })
+);
 
 // Root Health Check
 app.get('/api/health', (req, res) => {

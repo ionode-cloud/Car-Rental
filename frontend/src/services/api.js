@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const rawBaseURL = import.meta.env.VITE_API_URL || '/api';
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: rawBaseURL.replace(/\/+$/, ''),
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
@@ -20,10 +22,15 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor for centralized error message extraction
+// Response interceptor for centralized error message extraction and 401 token cleanup
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    // If token has expired or is unauthorized, clear local token to maintain clean client state
+    if (error.response?.status === 401) {
+      localStorage.removeItem('ridevista_token');
+    }
+
     const message =
       error.response?.data?.message ||
       error.message ||

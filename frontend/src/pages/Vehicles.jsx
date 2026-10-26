@@ -90,7 +90,7 @@ const Vehicles = () => {
     return 0; // Default order
   });
 
-  const handleCategoryClick = (category) => {
+  const handleCategoryClick = (category, shouldScroll = false) => {
     setSelectedCategory(category);
     if (category === 'All Vehicles') {
       searchParams.delete('category');
@@ -99,6 +99,9 @@ const Vehicles = () => {
       searchParams.set('category', category);
     }
     setSearchParams(searchParams);
+    if (shouldScroll) {
+      window.scrollTo({ top: 180, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -193,7 +196,7 @@ const Vehicles = () => {
 
       {/* Dual Direction Brand Marquee */}
       <div id="brands" className="mt-16">
-        <BrandMarquee onSelectBrand={(brand) => handleCategoryClick(brand)} />
+        <BrandMarquee onSelectBrand={(brand) => handleCategoryClick(brand, true)} />
       </div>
     </div>
   );

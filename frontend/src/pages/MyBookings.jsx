@@ -97,9 +97,12 @@ const MyBookings = () => {
     try {
       setDownloadingId(bookingId);
       setActionError('');
-      const apiBase = import.meta.env.VITE_API_URL || '/api';
+      const apiBase = (import.meta.env.VITE_API_URL || '/api').replace(/\/+$/, '');
+      const token = localStorage.getItem('ridevista_token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
       const response = await fetch(`${apiBase}/bookings/${bookingId}/invoice`, {
         method: 'GET',
+        headers,
         credentials: 'include',
       });
 
@@ -124,9 +127,12 @@ const MyBookings = () => {
     try {
       setDownloadingId(bookingId);
       setActionError('');
-      const apiBase = import.meta.env.VITE_API_URL || '/api';
+      const apiBase = (import.meta.env.VITE_API_URL || '/api').replace(/\/+$/, '');
+      const token = localStorage.getItem('ridevista_token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
       const response = await fetch(`${apiBase}/bookings/${bookingId}/invoice`, {
         method: 'GET',
+        headers,
         credentials: 'include',
       });
 
