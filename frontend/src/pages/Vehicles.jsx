@@ -170,7 +170,7 @@ const Vehicles = () => {
         ) : (
           <motion.div
             layout
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5 items-stretch"
+            className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-5 items-stretch"
           >
             <AnimatePresence mode="popLayout">
               {sortedVehicles.map((vehicle, index) => (

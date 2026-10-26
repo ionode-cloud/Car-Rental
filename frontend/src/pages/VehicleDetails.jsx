@@ -281,7 +281,7 @@ const VehicleDetails = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+            className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-8"
           >
             {(similarVehicles.length > 0 ? similarVehicles : []).slice(0, 3).map((car, idx) => (
               <motion.div
