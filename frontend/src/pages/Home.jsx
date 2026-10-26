@@ -397,128 +397,7 @@ const Home = () => {
       </section>
 
       {/* ========================================================
-          2. FEATURES SECTION (Screenshot 1: 3 Clean Feature Cards)
-          ======================================================== */}
-      <section className="container-fluid py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {/* Feature 1: Availability */}
-          <div className="card-animated-premium p-6 sm:p-8 flex flex-col items-center text-center group">
-            <div className="w-16 h-16 rounded-2xl bg-brand-primaryLight text-brand-primary flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-sm">
-              <Car className="w-8 h-8" />
-            </div>
-            <h3 className="text-lg sm:text-xl font-bold text-[#151515] group-hover:text-brand-primary transition-colors mb-2 font-heading">
-              Availability
-            </h3>
-            <p className="text-xs sm:text-sm text-[#777777] leading-relaxed max-w-sm">
-              Wide selection of vehicles ready for immediate pickup across city stations and premium mobility hubs.
-            </p>
-          </div>
-
-          {/* Feature 2: Comfort */}
-          <div className="card-animated-premium p-6 sm:p-8 flex flex-col items-center text-center group">
-            <div className="w-16 h-16 rounded-2xl bg-brand-primaryLight text-brand-primary flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-sm">
-              <ShieldCheck className="w-8 h-8" />
-            </div>
-            <h3 className="text-lg sm:text-xl font-bold text-[#151515] group-hover:text-brand-primary transition-colors mb-2 font-heading">
-              Comfort
-            </h3>
-            <p className="text-xs sm:text-sm text-[#777777] leading-relaxed max-w-sm">
-              Pristine sanitization, executive seats, climate control, and smooth automatic transmissions.
-            </p>
-          </div>
-
-          {/* Feature 3: Savings */}
-          <div className="card-animated-premium p-6 sm:p-8 flex flex-col items-center text-center group">
-            <div className="w-16 h-16 rounded-2xl bg-brand-primaryLight text-brand-primary flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-sm">
-              <BadgePercent className="w-8 h-8" />
-            </div>
-            <h3 className="text-lg sm:text-xl font-bold text-[#151515] group-hover:text-brand-primary transition-colors mb-2 font-heading">
-              Savings
-            </h3>
-            <p className="text-xs sm:text-sm text-[#777777] leading-relaxed max-w-sm">
-              Transparent daily pricing, zero hidden fees, flexible packages, and complimentary insurance.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================
-          3. ABOUT PREVIEW SECTION (Screenshot 1: 2-Column About)
-          ======================================================== */}
-      <section className="container-fluid pt-4 pb-6 sm:pt-6 sm:pb-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* Left: Large Rounded Image */}
-          <div className="lg:col-span-6">
-            <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[16/10] bg-gray-100">
-              <img
-                src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1400&auto=format&fit=crop"
-                alt="About Car Rental"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-            </div>
-          </div>
-
-          {/* Right: Content with Checklist */}
-          <div className="lg:col-span-6 space-y-5">
-            <span className="inline-block text-xs font-bold uppercase tracking-wider text-brand-primary bg-brand-primaryLight px-3.5 py-1 rounded-full">
-              About company
-            </span>
-
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#151515] leading-snug font-heading">
-              Feel the best experience with our luxury car rental
-            </h2>
-
-            <p className="text-sm sm:text-base text-[#777777] leading-relaxed">
-              We provide you with the most comfortable and reliable self-drive and chauffeur vehicles. Whether you're heading for a weekend getaway, business conference, or city commute, our seamless digital bookings make it effortless.
-            </p>
-
-            {/* 4 Feature Items */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
-              <div className="flex items-center gap-2.5">
-                <div className="w-6 h-6 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                </div>
-                <span className="text-xs sm:text-sm font-bold text-[#151515]">Best of service</span>
-              </div>
-
-              <div className="flex items-center gap-2.5">
-                <div className="w-6 h-6 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                </div>
-                <span className="text-xs sm:text-sm font-bold text-[#151515]">Convenient booking</span>
-              </div>
-
-              <div className="flex items-center gap-2.5">
-                <div className="w-6 h-6 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                </div>
-                <span className="text-xs sm:text-sm font-bold text-[#151515]">Affordable pricing</span>
-              </div>
-
-              <div className="flex items-center gap-2.5">
-                <div className="w-6 h-6 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                </div>
-                <span className="text-xs sm:text-sm font-bold text-[#151515]">Comfortable vehicles</span>
-              </div>
-            </div>
-
-            <div className="pt-2">
-              <Link
-                to="/about-us"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-primary hover:bg-brand-primaryHover text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md"
-              >
-                <span>Learn More</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================
-          BRAND MARQUEE: DUAL DIRECTION (LEFT-TO-RIGHT & RIGHT-TO-LEFT)
+          2. BRAND MARQUEE: DUAL DIRECTION (PREMIER AUTOMOTIVE FLEET)
           ======================================================== */}
       <BrandMarquee
         onSelectBrand={(brandName) => {
@@ -529,7 +408,7 @@ const Home = () => {
       />
 
       {/* ========================================================
-          4. CHOOSE YOUR VEHICLE WITH TIGHT TABS SPACING
+          3. CHOOSE YOUR VEHICLE WITH TIGHT TABS SPACING
           ======================================================== */}
       <section id="fleet-section" className="container-fluid pt-8 pb-6 sm:pt-10 sm:pb-8">
         {/* Heading & View All */}
@@ -613,7 +492,7 @@ const Home = () => {
               ))}
             </motion.div>
 
-            {/* Explore All Link / Button Below the 5 Cards */}
+            {/* Explore All Link / Button Below the 6 Cards */}
             <div className="text-center mt-8">
               <Link
                 to="/vehicles"
@@ -625,6 +504,127 @@ const Home = () => {
             </div>
           </>
         )}
+      </section>
+
+      {/* ========================================================
+          4. FEATURES SECTION (Availability, Comfort, Savings)
+          ======================================================== */}
+      <section className="container-fluid py-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          {/* Feature 1: Availability */}
+          <div className="card-animated-premium p-6 sm:p-8 flex flex-col items-center text-center group">
+            <div className="w-16 h-16 rounded-2xl bg-brand-primaryLight text-brand-primary flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-sm">
+              <Car className="w-8 h-8" />
+            </div>
+            <h3 className="text-lg sm:text-xl font-bold text-[#151515] group-hover:text-brand-primary transition-colors mb-2 font-heading">
+              Availability
+            </h3>
+            <p className="text-xs sm:text-sm text-[#777777] leading-relaxed max-w-sm">
+              Wide selection of vehicles ready for immediate pickup across city stations and premium mobility hubs.
+            </p>
+          </div>
+
+          {/* Feature 2: Comfort */}
+          <div className="card-animated-premium p-6 sm:p-8 flex flex-col items-center text-center group">
+            <div className="w-16 h-16 rounded-2xl bg-brand-primaryLight text-brand-primary flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-sm">
+              <ShieldCheck className="w-8 h-8" />
+            </div>
+            <h3 className="text-lg sm:text-xl font-bold text-[#151515] group-hover:text-brand-primary transition-colors mb-2 font-heading">
+              Comfort
+            </h3>
+            <p className="text-xs sm:text-sm text-[#777777] leading-relaxed max-w-sm">
+              Pristine sanitization, executive seats, climate control, and smooth automatic transmissions.
+            </p>
+          </div>
+
+          {/* Feature 3: Savings */}
+          <div className="card-animated-premium p-6 sm:p-8 flex flex-col items-center text-center group">
+            <div className="w-16 h-16 rounded-2xl bg-brand-primaryLight text-brand-primary flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-sm">
+              <BadgePercent className="w-8 h-8" />
+            </div>
+            <h3 className="text-lg sm:text-xl font-bold text-[#151515] group-hover:text-brand-primary transition-colors mb-2 font-heading">
+              Savings
+            </h3>
+            <p className="text-xs sm:text-sm text-[#777777] leading-relaxed max-w-sm">
+              Transparent daily pricing, zero hidden fees, flexible packages, and complimentary insurance.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================
+          5. ABOUT PREVIEW SECTION (2-Column About)
+          ======================================================== */}
+      <section className="container-fluid pt-4 pb-6 sm:pt-6 sm:pb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          {/* Left: Large Rounded Image */}
+          <div className="lg:col-span-6">
+            <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[16/10] bg-gray-100">
+              <img
+                src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1400&auto=format&fit=crop"
+                alt="About Car Rental"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+            </div>
+          </div>
+
+          {/* Right: Content with Checklist */}
+          <div className="lg:col-span-6 space-y-5">
+            <span className="inline-block text-xs font-bold uppercase tracking-wider text-brand-primary bg-brand-primaryLight px-3.5 py-1 rounded-full">
+              About company
+            </span>
+
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#151515] leading-snug font-heading">
+              Feel the best experience with our luxury car rental
+            </h2>
+
+            <p className="text-sm sm:text-base text-[#777777] leading-relaxed">
+              We provide you with the most comfortable and reliable self-drive and chauffeur vehicles. Whether you're heading for a weekend getaway, business conference, or city commute, our seamless digital bookings make it effortless.
+            </p>
+
+            {/* 4 Feature Items */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+              <div className="flex items-center gap-2.5">
+                <div className="w-6 h-6 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-xs sm:text-sm font-bold text-[#151515]">Best of service</span>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <div className="w-6 h-6 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-xs sm:text-sm font-bold text-[#151515]">Convenient booking</span>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <div className="w-6 h-6 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-xs sm:text-sm font-bold text-[#151515]">Affordable pricing</span>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <div className="w-6 h-6 rounded-full bg-brand-primary text-white flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-xs sm:text-sm font-bold text-[#151515]">Comfortable vehicles</span>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <Link
+                to="/about-us"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-primary hover:bg-brand-primaryHover text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md"
+              >
+                <span>Learn More</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
       </section>
 
 
