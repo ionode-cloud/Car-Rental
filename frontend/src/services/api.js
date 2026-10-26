@@ -8,6 +8,18 @@ const api = axios.create({
   },
 });
 
+// Request interceptor to attach JWT token from localStorage if present
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('ridevista_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 // Response interceptor for centralized error message extraction
 api.interceptors.response.use(
   (response) => response.data,

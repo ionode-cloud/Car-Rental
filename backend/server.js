@@ -44,15 +44,77 @@ app.use(
   helmet({
     contentSecurityPolicy: false,
     crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
   })
 );
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
-    credentials: true,
-  })
-);
+// Dynamic allowed origins parser: supports comma-separated CLIENT_URL, wildcard, and vercel.app domains
+const getAllowedOrigins = () => {
+  const envUrls = process.env.CLIENT_URL
+    ? process.env.CLIENT_URL.split(',').map((u) => u.trim().replace(/\/$/, ''))
+    : [];
+
+  return [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://localhost:4173',
+    'https://car-rental-brown-alpha.vercel.app',
+    ...envUrls,
+  ].filter(Boolean);
+};
+
+const isOriginAllowed = (origin) => {
+  if (!origin) return true;
+
+  const allowed = getAllowedOrigins();
+
+  // If wildcard '*' was configured in CLIENT_URL, reflect origin directly
+  // (CORS specification requires explicit origin, never '*', when credentials: true)
+  if (allowed.includes('*') || process.env.CLIENT_URL === '*') {
+    return true;
+  }
+
+  // Exact match against allowed list
+  if (allowed.includes(origin)) {
+    return true;
+  }
+
+  // Allow any Vercel domain (production or preview deployments)
+  try {
+    const parsed = new URL(origin);
+    if (parsed.hostname.endsWith('.vercel.app') || parsed.hostname === 'vercel.app') {
+      return true;
+    }
+  } catch (e) {
+    // Ignore invalid origin strings
+  }
+
+  // Allow localhost on any port
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+    return true;
+  }
+
+  return false;
+};
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (isOriginAllowed(origin)) {
+      // Returning true reflects the caller's origin header, ensuring withCredentials: true works cleanly
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  exposedHeaders: ['Set-Cookie'],
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));

@@ -126,8 +126,11 @@ export const login = async (req, res) => {
  * @access  Public
  */
 export const logout = (req, res) => {
+  const isProduction = process.env.NODE_ENV === 'production';
   res.cookie('jwt', '', {
     httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
     expires: new Date(0),
   });
 
@@ -184,7 +187,8 @@ export const forgotPassword = async (req, res) => {
 
     await user.save({ validateBeforeSave: false });
 
-    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    const rawClientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    const clientUrl = rawClientUrl.split(',')[0].trim().replace(/\/$/, '');
     const resetUrl = `${clientUrl}/reset-password/${resetToken}`;
 
     await sendEmail({

@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
           setUser(response.user);
         }
       } catch (err) {
+        localStorage.removeItem('ridevista_token');
         setUser(null);
       } finally {
         setLoading(false);
@@ -28,6 +29,9 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     const response = await authService.login({ email, password });
     if (response.success && response.user) {
+      if (response.token) {
+        localStorage.setItem('ridevista_token', response.token);
+      }
       setUser(response.user);
       return response.user;
     }
@@ -37,6 +41,9 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     const response = await authService.register(userData);
     if (response.success && response.user) {
+      if (response.token) {
+        localStorage.setItem('ridevista_token', response.token);
+      }
       setUser(response.user);
       return response.user;
     }
@@ -49,6 +56,7 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.warn('Logout error:', err.message);
     } finally {
+      localStorage.removeItem('ridevista_token');
       setUser(null);
     }
   };
