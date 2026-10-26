@@ -10,10 +10,21 @@ export const AuthProvider = ({ children }) => {
   // Check auth status on mount
   useEffect(() => {
     const checkAuthStatus = async () => {
+      const token = localStorage.getItem('ridevista_token');
+      // If there is no token stored, the visitor is a guest — skip request to avoid 401 in console
+      if (!token) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await authService.getMe();
         if (response.success && response.user) {
           setUser(response.user);
+        } else {
+          localStorage.removeItem('ridevista_token');
+          setUser(null);
         }
       } catch (err) {
         localStorage.removeItem('ridevista_token');
