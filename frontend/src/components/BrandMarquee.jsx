@@ -77,7 +77,7 @@ const BrandCard = ({ brand, onClick }) => (
     </div>
 
     {/* Brand Name Only */}
-    <span className="text-xs sm:text-sm font-black text-[#151515] group-hover:text-brand-primary transition-colors tracking-tight whitespace-nowrap">
+    <span className="text-xs sm:text-sm text-[#151515] group-hover:text-brand-primary transition-colors whitespace-nowrap">
       {brand.name}
     </span>
   </div>
