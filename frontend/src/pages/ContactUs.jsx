@@ -37,15 +37,6 @@ const BLOG_POSTS = [
   },
 ];
 
-const BRANDS = [
-  { name: 'Toyota', logo: 'https://upload.wikimedia.org/wikipedia/commons/e/ee/Toyota_logo_%282020%29.svg' },
-  { name: 'Ford', logo: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Ford_logo_flat.svg' },
-  { name: 'Mercedes-Benz', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Mercedes-Logo.svg' },
-  { name: 'Jeep', logo: 'https://upload.wikimedia.org/wikipedia/commons/8/87/Jeep_logo.svg' },
-  { name: 'BMW', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg' },
-  { name: 'Audi', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg' },
-];
-
 const ContactUs = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -382,41 +373,6 @@ const ContactUs = () => {
               </motion.div>
             ))}
           </div>
-        </div>
-      </div>
-
-      {/* ==================== 5. FULL WIDTH BRAND LOGO STRIP ==================== */}
-      <div className="w-full bg-[#F8F8FA] border-t border-[#EAEAEA] py-8 mt-8 rounded-none">
-        <div className="container-fluid">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="grid grid-cols-3 md:grid-cols-6 gap-6 sm:gap-8 items-center justify-items-center opacity-70 hover:opacity-100 transition-opacity"
-          >
-            {BRANDS.map((brand) => (
-              <motion.div
-                key={brand.name}
-                whileHover={{ scale: 1.15, y: -4 }}
-                transition={{ type: 'spring', stiffness: 350 }}
-                className="flex flex-col items-center justify-center p-2 grayscale hover:grayscale-0 transition-all cursor-pointer"
-              >
-                <img
-                  src={brand.logo}
-                  alt={brand.name}
-                  className="h-8 sm:h-10 w-auto object-contain max-w-[90px]"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling.style.display = 'block';
-                  }}
-                />
-                <span className="hidden text-sm font-extrabold tracking-wider text-gray-800">
-                  {brand.name}
-                </span>
-              </motion.div>
-            ))}
-          </motion.div>
         </div>
       </div>
     </div>
