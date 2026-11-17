@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { vehicleService } from '../services/vehicleService';
@@ -20,24 +20,21 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-const HOME_CATEGORIES = [
-  'All Vehicles',
-  'Toyota',
-  'Ford',
-  'Mercedes-Benz',
-  'Jeep',
-  'BMW',
-  'Audi',
-  'SUV',
-  'Sedan',
+const VEHICLE_TABS = [
+  { label: 'All Categories', value: 'all' },
+  { label: 'Cars', value: 'cars' },
+  { label: 'Bikes', value: 'bikes' },
+  { label: 'Scooties', value: 'scooties' },
+  { label: 'SUVs', value: 'suv' },
+  { label: 'Sedans', value: 'sedan' },
+  { label: 'Hatchbacks', value: 'hatchback' },
+  { label: 'Electric (EV)', value: 'electric' },
 ];
-
-const PREFERRED_BRANDS = ['Toyota', 'Ford', 'Mercedes-Benz', 'Jeep', 'BMW', 'Audi'];
 
 const Home = () => {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState('All Vehicles');
+  const [activeCategory, setActiveCategory] = useState('all');
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = React.useRef(null);
   const navigate = useNavigate();
@@ -124,37 +121,51 @@ const Home = () => {
     }
   };
 
-  // Filter vehicles on Home by category or brand tab
-  const filteredVehicles = vehicles.filter((v) => {
-    if (activeCategory === 'All Vehicles') return true;
-    if (activeCategory === 'Scooties') return v.vehicleType === 'scooty' || v.category === 'Scooties';
-    if (activeCategory === 'Bikes') return v.vehicleType === 'bike' || v.category === 'Bikes';
-    if (activeCategory === 'Electric') return v.fuelType === 'Electric';
+  // Filter vehicles on Home according to Vehicles tab rules
+  const filteredVehicles = useMemo(() => {
+    return vehicles.filter((v) => {
+      if (
+        activeCategory === 'all' ||
+        activeCategory === 'All Categories' ||
+        activeCategory === 'All Vehicles'
+      ) {
+        return true;
+      }
 
-    // Direct brand matching for Toyota, Ford, Mercedes-Benz, Jeep, BMW, Audi
-    if (v.brand?.toLowerCase() === activeCategory.toLowerCase()) return true;
+      const t = activeCategory.toLowerCase();
+      const vType = (v.vehicleType || '').toLowerCase();
+      const vCat = (v.category || '').toLowerCase();
+      const vFuel = (v.fuelType || '').toLowerCase();
+      const vBrand = (v.brand || '').toLowerCase();
 
-    return (
-      v.category?.toLowerCase() === activeCategory.toLowerCase() ||
-      v.vehicleType?.toLowerCase() === activeCategory.toLowerCase() ||
-      v.model?.toLowerCase().includes(activeCategory.toLowerCase())
-    );
-  });
+      // Vehicles tabs filtering
+      if (t === 'cars') return vType === 'car' || vCat === 'cars';
+      if (t === 'bikes') return vType === 'bike' || vCat === 'bikes';
+      if (t === 'scooties') return vType === 'scooty' || vCat === 'scooties';
+      if (t === 'suv') return vCat === 'suv' || vType === 'suv';
+      if (t === 'sedan') return vCat === 'sedan' || vType === 'sedan';
+      if (t === 'hatchback') return vCat === 'hatchback' || vType === 'hatchback';
+      if (t === 'electric') return vFuel === 'electric' || vCat === 'electric';
 
-  // Prioritize requested world-class brands on Home cards (Toyota, Ford, Mercedes-Benz, Jeep, BMW, Audi)
-  const displayedVehicles = [...filteredVehicles].sort((a, b) => {
-    const aMatch = PREFERRED_BRANDS.findIndex(
-      (br) => br.toLowerCase() === a.brand?.toLowerCase()
-    );
-    const bMatch = PREFERRED_BRANDS.findIndex(
-      (br) => br.toLowerCase() === b.brand?.toLowerCase()
-    );
+      // Brand matching fallback if clicked from brand marquee
+      if (vBrand === t || vBrand.includes(t)) return true;
 
-    if (aMatch !== -1 && bMatch !== -1) return aMatch - bMatch;
-    if (aMatch !== -1) return -1;
-    if (bMatch !== -1) return 1;
-    return 0;
-  });
+      return (
+        vCat === t ||
+        vType === t ||
+        (v.model || '').toLowerCase().includes(t)
+      );
+    });
+  }, [vehicles, activeCategory]);
+
+  // Featured / popular vehicles on Home
+  const displayedVehicles = useMemo(() => {
+    return [...filteredVehicles].sort((a, b) => {
+      if (a.featured && !b.featured) return -1;
+      if (!a.featured && b.featured) return 1;
+      return 0;
+    });
+  }, [filteredVehicles]);
 
   return (
     <div className="bg-white text-[#151515] overflow-hidden w-full">
@@ -434,7 +445,7 @@ const Home = () => {
           </div>
 
           <Link
-            to="/vehicles"
+            to={activeCategory !== 'all' ? `/vehicles?category=${encodeURIComponent(activeCategory)}` : '/vehicles'}
             className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-brand-primary hover:text-brand-primaryHover transition-colors self-start sm:self-auto"
           >
             <span>View All</span>
@@ -442,16 +453,18 @@ const Home = () => {
           </Link>
         </div>
 
-        {/* Category Tabs: Tight gap to the vehicle grid with animated layoutId pill */}
-        <div className="flex items-center flex-wrap gap-2 mb-4">
-          {HOME_CATEGORIES.map((cat) => {
-            const isActive = activeCategory === cat;
+        {/* Category Tabs: Aligned with Vehicles Tabs */}
+        <div className="flex items-center flex-wrap gap-2 mb-5">
+          {VEHICLE_TABS.map((tab) => {
+            const isActive = activeCategory === tab.value;
             return (
               <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`relative px-4 py-2 rounded-full text-xs font-bold transition-colors ${
-                  isActive ? 'text-white' : 'text-[#777777] hover:text-[#151515] bg-[#F8F8FA]'
+                key={tab.value}
+                onClick={() => setActiveCategory(tab.value)}
+                className={`relative px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                  isActive
+                    ? 'text-white shadow-xs'
+                    : 'text-[#777777] hover:text-[#151515] bg-[#F8F8FA] hover:bg-gray-100'
                 }`}
               >
                 {isActive && (
@@ -461,7 +474,7 @@ const Home = () => {
                     transition={{ type: 'spring', stiffness: 450, damping: 32 }}
                   />
                 )}
-                <span>{cat}</span>
+                <span>{tab.label}</span>
               </button>
             );
           })}
@@ -478,8 +491,8 @@ const Home = () => {
               No vehicles available in this category currently.
             </p>
             <button
-              onClick={() => setActiveCategory('All Vehicles')}
-              className="text-xs font-bold text-brand-primary hover:underline"
+              onClick={() => setActiveCategory('all')}
+              className="text-xs font-bold text-brand-primary hover:underline cursor-pointer"
             >
               View all vehicles
             </button>
@@ -488,44 +501,28 @@ const Home = () => {
           <>
             <motion.div
               layout
-              className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-5 items-stretch"
+              className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4.5 items-stretch"
             >
-              {displayedVehicles.slice(0, 10).map((vehicle, idx) => {
-                // Responsive visibility to ensure exactly 2 complete rows across all screen breakpoints:
-                // Mobile (2 cols): 2 rows = 4 cards
-                // Tablet md (3 cols): 2 rows = 6 cards
-                // Laptop lg (4 cols): 2 rows = 8 cards
-                // Desktop xl (5 cols): 2 rows = 10 cards
-                const visibilityClass =
-                  idx < 4
-                    ? 'block'
-                    : idx < 6
-                    ? 'hidden md:block'
-                    : idx < 8
-                    ? 'hidden lg:block'
-                    : 'hidden xl:block';
-
-                return (
-                  <motion.div
-                    key={vehicle._id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: idx * 0.04 }}
-                    className={`h-full ${visibilityClass}`}
-                  >
-                    <VehicleCard vehicle={vehicle} />
-                  </motion.div>
-                );
-              })}
+              {displayedVehicles.slice(0, 8).map((vehicle, idx) => (
+                <motion.div
+                  key={vehicle._id}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, delay: idx * 0.03 }}
+                  className="h-full"
+                >
+                  <VehicleCard vehicle={vehicle} />
+                </motion.div>
+              ))}
             </motion.div>
 
-            {/* Explore All Link / Button Below the 6 Cards */}
+            {/* Explore All Link / Button Below the Cards */}
             <div className="text-center mt-8">
               <Link
-                to="/vehicles"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#F8F8FA] hover:bg-brand-primary text-[#151515] hover:text-white border border-[#EAEAEA] font-bold text-xs tracking-wider uppercase transition-all shadow-sm hover:shadow-md"
+                to={activeCategory !== 'all' ? `/vehicles?category=${encodeURIComponent(activeCategory)}` : '/vehicles'}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#F8F8FA] hover:bg-brand-primary text-[#151515] hover:text-white border border-[#EAEAEA] font-bold text-xs tracking-wider uppercase transition-all shadow-xs hover:shadow-md"
               >
-                <span>Explore Full Fleet ({displayedVehicles.length} Vehicles)</span>
+                <span>Explore Full Fleet ({filteredVehicles.length} Vehicles)</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
