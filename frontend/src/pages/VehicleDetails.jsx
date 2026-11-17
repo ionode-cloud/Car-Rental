@@ -91,11 +91,12 @@ const VehicleDetails = () => {
     return dt;
   };
 
-  // Live calculation of duration and price from custom dates
-  // Strictly according to user-provided rates:
-  // 4 Hours: ₹800 | 8 Hours: ₹1,200 | 24 Hours: ₹1,800 | Multi-Day: Days * ₹1,800
+  // Live calculation of duration and price from custom dates based on vehicle daily rate
   const computeTripDetails = () => {
-    const dayRate = 1800;
+    const dayRate = Number(vehicle?.pricePerDay) || 1800;
+    const fourHourRate = vehicle?.pricePerHour > 0 ? vehicle.pricePerHour * 4 : Math.round(dayRate * 0.45);
+    const eightHourRate = vehicle?.pricePerHour > 0 ? vehicle.pricePerHour * 8 : Math.round(dayRate * 0.70);
+
     const pDt = parseDateTime(pickupDate, pickupTime);
     const rDt = parseDateTime(returnDate, returnTime);
     const diffMs = rDt.getTime() - pDt.getTime();
@@ -107,13 +108,13 @@ const VehicleDetails = () => {
 
     if (diffHours < 3.99) {
       isUnderMin = true;
-      price = 800;
+      price = fourHourRate;
       durationLabel = `${Math.max(1, Math.round(diffHours))}h (Below 4h min)`;
     } else if (diffHours <= 4) {
-      price = 800;
+      price = fourHourRate;
       durationLabel = '4 Hours (Minimum)';
     } else if (diffHours <= 8) {
-      price = 1200;
+      price = eightHourRate;
       durationLabel = '8 Hours';
     } else if (diffHours <= 24) {
       price = dayRate;
@@ -365,7 +366,9 @@ const VehicleDetails = () => {
                   <Key className="w-4 h-4 shrink-0" />
                   <div>
                     <span className="text-xs font-bold block leading-tight">Self Drive</span>
-                    <span className="text-[9px] text-gray-500 font-medium">₹1,800/day • Min 4h</span>
+                    <span className="text-[9px] text-gray-500 font-medium">
+                      {formatCurrency(vehicle?.pricePerDay || 1800)}/day • Min 4h
+                    </span>
                   </div>
                 </button>
 
@@ -381,7 +384,9 @@ const VehicleDetails = () => {
                   <User className="w-4 h-4 shrink-0" />
                   <div>
                     <span className="text-xs font-bold block leading-tight">With Driver</span>
-                    <span className="text-[9px] text-gray-500 font-medium">₹1,800/day • Min 4h</span>
+                    <span className="text-[9px] text-gray-500 font-medium">
+                      {formatCurrency(vehicle?.pricePerDay || 1800)}/day • Min 4h
+                    </span>
                   </div>
                 </button>
               </div>

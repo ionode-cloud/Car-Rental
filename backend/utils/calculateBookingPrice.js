@@ -27,11 +27,11 @@ export const calculateBookingPrice = ({
   let rentalDays = 1;
   let hours = 0;
 
-  // Standard Rental Pricing provided by customer:
-  // 4 Hours: ₹800
-  // 8 Hours: ₹1,200
-  // 24 Hours (1 Day): ₹1,800
-  const dailyRate = 1800;
+  // Dynamic Rental Pricing from vehicle rates:
+  const dailyRate = Number(vehicle?.pricePerDay) || 1800;
+  const fourHourRate = vehicle?.pricePerHour > 0 ? vehicle.pricePerHour * 4 : Math.round(dailyRate * 0.45);
+  const eightHourRate = vehicle?.pricePerHour > 0 ? vehicle.pricePerHour * 8 : Math.round(dailyRate * 0.70);
+  const twelveHourRate = vehicle?.pricePerHour > 0 ? vehicle.pricePerHour * 12 : Math.round(dailyRate * 0.85);
 
   // Check if dates are given and compute difference in hours
   let computedHoursFromDates = 0;
@@ -63,22 +63,22 @@ export const calculateBookingPrice = ({
   } else if (durationTier === '4 Hours') {
     hours = 4;
     rentalDays = 1;
-    baseRental = 800;
+    baseRental = fourHourRate;
   } else if (durationTier === '8 Hours') {
     hours = 8;
     rentalDays = 1;
-    baseRental = 1200;
+    baseRental = eightHourRate;
   } else if (durationTier === '12 Hours') {
     hours = 12;
     rentalDays = 1;
-    baseRental = 1500;
+    baseRental = twelveHourRate;
   } else if (estimatedHours && Number(estimatedHours) > 0) {
     hours = Math.max(4, Number(estimatedHours)); // Enforce minimum 4 hours
     if (hours <= 4) {
-      baseRental = 800;
+      baseRental = fourHourRate;
       rentalDays = 1;
     } else if (hours <= 8) {
-      baseRental = 1200;
+      baseRental = eightHourRate;
       rentalDays = 1;
     } else if (hours <= 24) {
       baseRental = dailyRate;
@@ -90,10 +90,10 @@ export const calculateBookingPrice = ({
   } else if (computedHoursFromDates > 0) {
     hours = Math.max(4, computedHoursFromDates); // Enforce minimum 4 hours
     if (hours <= 4) {
-      baseRental = 800;
+      baseRental = fourHourRate;
       rentalDays = 1;
     } else if (hours <= 8) {
-      baseRental = 1200;
+      baseRental = eightHourRate;
       rentalDays = 1;
     } else {
       rentalDays = Math.max(1, Math.ceil(hours / 24));

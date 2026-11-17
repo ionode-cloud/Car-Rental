@@ -247,10 +247,11 @@ const BookingCheckout = () => {
     reader.readAsDataURL(file);
   };
 
-  // Calculate pricing dynamically according to customer-provided rate table:
-  // 4 Hours: ₹800 | 8 Hours: ₹1,200 | 24 Hours (1 Day): ₹1,800 | Multi-Day: Days * ₹1,800
+  // Calculate pricing dynamically according to vehicle daily rate:
   const calculatePricing = () => {
-    const dayRate = 1800;
+    const dayRate = Number(vehicle?.pricePerDay) || 1800;
+    const fourHourRate = vehicle?.pricePerHour > 0 ? vehicle.pricePerHour * 4 : Math.round(dayRate * 0.45);
+    const eightHourRate = vehicle?.pricePerHour > 0 ? vehicle.pricePerHour * 8 : Math.round(dayRate * 0.70);
 
     let baseAmount = dayRate;
     let durationLabel = '1 Day (24 Hours)';
@@ -265,13 +266,13 @@ const BookingCheckout = () => {
 
       if (diffHours < 3.99) {
         isUnderMin = true;
-        baseAmount = 800;
+        baseAmount = fourHourRate;
         durationLabel = `${Math.max(1, Math.round(diffHours))}h (Below 4h min)`;
       } else if (diffHours <= 4) {
-        baseAmount = 800;
+        baseAmount = fourHourRate;
         durationLabel = '4 Hours (Minimum Slot)';
       } else if (diffHours <= 8) {
-        baseAmount = 1200;
+        baseAmount = eightHourRate;
         durationLabel = '8 Hours';
       } else if (diffHours <= 24) {
         baseAmount = dayRate;
