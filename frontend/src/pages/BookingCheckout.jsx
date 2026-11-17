@@ -35,6 +35,13 @@ import {
   Minus,
 } from 'lucide-react';
 
+const TIME_OPTIONS = [
+  '06:00 AM', '07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM',
+  '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM',
+  '06:00 PM', '07:00 PM', '08:00 PM', '09:00 PM', '10:00 PM', '11:00 PM',
+  '12:00 AM', '01:00 AM', '02:00 AM', '03:00 AM', '04:00 AM', '05:00 AM'
+];
+
 const BookingCheckout = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const vehicleIdParam = searchParams.get('vehicleId');
@@ -74,11 +81,18 @@ const BookingCheckout = () => {
   const [dropLocation, setDropLocation] = useState('');
 
   // Helper for today / tomorrow dates
-  const getTodayStr = () => new Date().toISOString().split('T')[0];
+  const formatLocalDate = (d) => {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const getTodayStr = () => formatLocalDate(new Date());
   const getTomorrowStr = () => {
     const d = new Date();
     d.setDate(d.getDate() + 1);
-    return d.toISOString().split('T')[0];
+    return formatLocalDate(d);
   };
 
   const pickupDateParam = searchParams.get('pickupDate');
@@ -127,12 +141,12 @@ const BookingCheckout = () => {
     return dt;
   };
 
-  // Quick extend handler (+4h, +1 Day, +2 Days, +3 Days, +5 Days)
+  // Quick extend handler (+4h, +8h, +1 Day, +2 Days, +3 Days, +5 Days)
   const handleQuickExtend = (type, val) => {
     const pDt = parseDateTime(pickupDate, pickupTime);
     if (type === 'hours') {
       const newRDt = new Date(pDt.getTime() + val * 60 * 60 * 1000);
-      setReturnDate(newRDt.toISOString().split('T')[0]);
+      setReturnDate(formatLocalDate(newRDt));
       const rh = newRDt.getHours();
       const rm = newRDt.getMinutes().toString().padStart(2, '0');
       const rmer = rh >= 12 ? 'PM' : 'AM';
@@ -140,16 +154,19 @@ const BookingCheckout = () => {
       setReturnTime(`${disph.toString().padStart(2, '0')}:${rm} ${rmer}`);
     } else if (type === 'days') {
       const newRDt = new Date(pDt.getTime() + val * 24 * 60 * 60 * 1000);
-      setReturnDate(newRDt.toISOString().split('T')[0]);
+      setReturnDate(formatLocalDate(newRDt));
+      setReturnTime(pickupTime);
     }
   };
 
   const handlePickupDateChange = (val) => {
     setPickupDate(val);
-    if (val >= returnDate) {
-      const nextDay = new Date(val);
-      nextDay.setDate(nextDay.getDate() + 1);
-      setReturnDate(nextDay.toISOString().split('T')[0]);
+    const pDt = parseDateTime(val, pickupTime);
+    const rDt = parseDateTime(returnDate, returnTime);
+    if (pDt.getTime() >= rDt.getTime()) {
+      const nextDay = new Date(pDt.getTime() + 24 * 60 * 60 * 1000);
+      setReturnDate(formatLocalDate(nextDay));
+      setReturnTime(pickupTime);
     }
   };
 
@@ -908,16 +925,14 @@ const BookingCheckout = () => {
                       onChange={(e) => setPickupTime(e.target.value)}
                       className="w-full bg-gray-50/70 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs text-[#151515] font-bold focus:outline-none focus:border-brand-primary focus:bg-white transition-all shadow-xs cursor-pointer"
                     >
-                      <option value="08:00 AM">08:00 AM</option>
-                      <option value="09:00 AM">09:00 AM</option>
-                      <option value="10:00 AM">10:00 AM</option>
-                      <option value="11:00 AM">11:00 AM</option>
-                      <option value="12:00 PM">12:00 PM</option>
-                      <option value="02:00 PM">02:00 PM</option>
-                      <option value="04:00 PM">04:00 PM</option>
-                      <option value="06:00 PM">06:00 PM</option>
-                      <option value="08:00 PM">08:00 PM</option>
-                      <option value="10:00 PM">10:00 PM</option>
+                      {TIME_OPTIONS.map((t) => (
+                        <option key={t} value={t}>
+                          {t}
+                        </option>
+                      ))}
+                      {!TIME_OPTIONS.includes(pickupTime) && (
+                        <option value={pickupTime}>{pickupTime}</option>
+                      )}
                     </select>
                   </div>
                 </div>
@@ -950,16 +965,14 @@ const BookingCheckout = () => {
                       onChange={(e) => setReturnTime(e.target.value)}
                       className="w-full bg-gray-50/70 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs text-[#151515] font-bold focus:outline-none focus:border-brand-primary focus:bg-white transition-all shadow-xs cursor-pointer"
                     >
-                      <option value="08:00 AM">08:00 AM</option>
-                      <option value="09:00 AM">09:00 AM</option>
-                      <option value="10:00 AM">10:00 AM</option>
-                      <option value="11:00 AM">11:00 AM</option>
-                      <option value="12:00 PM">12:00 PM</option>
-                      <option value="02:00 PM">02:00 PM</option>
-                      <option value="04:00 PM">04:00 PM</option>
-                      <option value="06:00 PM">06:00 PM</option>
-                      <option value="08:00 PM">08:00 PM</option>
-                      <option value="10:00 PM">10:00 PM</option>
+                      {TIME_OPTIONS.map((t) => (
+                        <option key={t} value={t}>
+                          {t}
+                        </option>
+                      ))}
+                      {!TIME_OPTIONS.includes(returnTime) && (
+                        <option value={returnTime}>{returnTime}</option>
+                      )}
                     </select>
                   </div>
                 </div>
@@ -970,35 +983,66 @@ const BookingCheckout = () => {
                   <button
                     type="button"
                     onClick={() => handleQuickExtend('hours', 4)}
-                    className="px-2.5 py-1 rounded-xl bg-gray-50 border border-gray-200 hover:border-brand-primary text-[10px] font-bold text-gray-700 hover:text-brand-primary transition-colors cursor-pointer"
+                    className={`px-2.5 py-1 rounded-xl border text-[10px] font-bold transition-colors cursor-pointer ${
+                      pricing.diffHours >= 3.99 && pricing.diffHours <= 4.01
+                        ? 'bg-brand-primary text-white border-brand-primary shadow-2xs'
+                        : 'bg-gray-50 border-gray-200 hover:border-brand-primary text-gray-700 hover:text-brand-primary'
+                    }`}
                   >
                     +4 Hours
                   </button>
                   <button
                     type="button"
+                    onClick={() => handleQuickExtend('hours', 8)}
+                    className={`px-2.5 py-1 rounded-xl border text-[10px] font-bold transition-colors cursor-pointer ${
+                      pricing.diffHours >= 7.99 && pricing.diffHours <= 8.01
+                        ? 'bg-brand-primary text-white border-brand-primary shadow-2xs'
+                        : 'bg-gray-50 border-gray-200 hover:border-brand-primary text-gray-700 hover:text-brand-primary'
+                    }`}
+                  >
+                    +8 Hours
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => handleQuickExtend('days', 1)}
-                    className="px-2.5 py-1 rounded-xl bg-gray-50 border border-gray-200 hover:border-brand-primary text-[10px] font-bold text-gray-700 hover:text-brand-primary transition-colors cursor-pointer"
+                    className={`px-2.5 py-1 rounded-xl border text-[10px] font-bold transition-colors cursor-pointer ${
+                      pricing.diffHours >= 23.99 && pricing.diffHours <= 24.01
+                        ? 'bg-brand-primary text-white border-brand-primary shadow-2xs'
+                        : 'bg-gray-50 border-gray-200 hover:border-brand-primary text-gray-700 hover:text-brand-primary'
+                    }`}
                   >
                     +1 Day
                   </button>
                   <button
                     type="button"
                     onClick={() => handleQuickExtend('days', 2)}
-                    className="px-2.5 py-1 rounded-xl bg-gray-50 border border-gray-200 hover:border-brand-primary text-[10px] font-bold text-gray-700 hover:text-brand-primary transition-colors cursor-pointer"
+                    className={`px-2.5 py-1 rounded-xl border text-[10px] font-bold transition-colors cursor-pointer ${
+                      pricing.diffHours >= 47.99 && pricing.diffHours <= 48.01
+                        ? 'bg-brand-primary text-white border-brand-primary shadow-2xs'
+                        : 'bg-gray-50 border-gray-200 hover:border-brand-primary text-gray-700 hover:text-brand-primary'
+                    }`}
                   >
                     +2 Days
                   </button>
                   <button
                     type="button"
                     onClick={() => handleQuickExtend('days', 3)}
-                    className="px-2.5 py-1 rounded-xl bg-gray-50 border border-gray-200 hover:border-brand-primary text-[10px] font-bold text-gray-700 hover:text-brand-primary transition-colors cursor-pointer"
+                    className={`px-2.5 py-1 rounded-xl border text-[10px] font-bold transition-colors cursor-pointer ${
+                      pricing.diffHours >= 71.99 && pricing.diffHours <= 72.01
+                        ? 'bg-brand-primary text-white border-brand-primary shadow-2xs'
+                        : 'bg-gray-50 border-gray-200 hover:border-brand-primary text-gray-700 hover:text-brand-primary'
+                    }`}
                   >
                     +3 Days
                   </button>
                   <button
                     type="button"
                     onClick={() => handleQuickExtend('days', 5)}
-                    className="px-2.5 py-1 rounded-xl bg-gray-50 border border-gray-200 hover:border-brand-primary text-[10px] font-bold text-gray-700 hover:text-brand-primary transition-colors cursor-pointer"
+                    className={`px-2.5 py-1 rounded-xl border text-[10px] font-bold transition-colors cursor-pointer ${
+                      pricing.diffHours >= 119.99 && pricing.diffHours <= 120.01
+                        ? 'bg-brand-primary text-white border-brand-primary shadow-2xs'
+                        : 'bg-gray-50 border-gray-200 hover:border-brand-primary text-gray-700 hover:text-brand-primary'
+                    }`}
                   >
                     +5 Days
                   </button>
