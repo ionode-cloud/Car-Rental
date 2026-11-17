@@ -52,9 +52,9 @@ const Packages = () => {
   };
 
   return (
-    <div className="min-h-screen bg-brand-black text-white pt-24 pb-20">
+    <div className="min-h-screen bg-brand-black text-white pt-16 pb-12">
       {/* Header Banner */}
-      <section className="relative py-16 px-4 sm:px-6 lg:px-8 border-b border-white/10 text-center">
+      <section className="relative py-10 px-4 sm:px-6 lg:px-8 border-b border-white/10 text-center">
         <div className="max-w-3xl mx-auto">
           <span className="text-brand-primary text-xs font-bold uppercase tracking-widest">
             Value Bundles

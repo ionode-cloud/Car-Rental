@@ -59,7 +59,7 @@ const AdminReports = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold text-brand-primary uppercase tracking-wider">
@@ -105,7 +105,7 @@ const AdminReports = () => {
       </div>
 
       {/* Report Records Table */}
-      <div className="glass-panel rounded-3xl border border-white/10 overflow-hidden">
+      <div className="glass-panel rounded-2xl border border-white/10 overflow-hidden">
         {loading ? (
           <LoadingSpinner text="Generating Report..." />
         ) : (
@@ -113,12 +113,12 @@ const AdminReports = () => {
             <table className="w-full text-left text-xs text-gray-300">
               <thead className="text-[11px] uppercase tracking-wider text-gray-400 bg-white/5 border-b border-white/10">
                 <tr>
-                  <th className="p-4">Reference</th>
-                  <th className="p-4">Customer</th>
-                  <th className="p-4">Vehicle</th>
-                  <th className="p-4">Amount</th>
-                  <th className="p-4">{reportType === 'revenue' ? 'Payment Status' : 'Trip Status'}</th>
-                  <th className="p-4 text-right">Timestamp</th>
+                  <th className="p-3 sm:p-3.5">Reference</th>
+                  <th className="p-3 sm:p-3.5">Customer</th>
+                  <th className="p-3 sm:p-3.5">Vehicle</th>
+                  <th className="p-3 sm:p-3.5">Amount</th>
+                  <th className="p-3 sm:p-3.5">{reportType === 'revenue' ? 'Payment Status' : 'Trip Status'}</th>
+                  <th className="p-3 sm:p-3.5 text-right">Timestamp</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -131,24 +131,24 @@ const AdminReports = () => {
                 ) : (
                   reportData?.records?.map((r) => (
                     <tr key={r._id} className="hover:bg-white/5 transition-colors">
-                      <td className="p-4 font-bold text-white whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 font-bold text-white whitespace-nowrap">
                         {r.bookingReference}
                       </td>
-                      <td className="p-4 text-gray-200">
+                      <td className="p-3 sm:p-3.5 text-gray-200">
                         {r.customer?.name || r.customerDetails?.name || 'Customer'}
                       </td>
-                      <td className="p-4 text-white">
+                      <td className="p-3 sm:p-3.5 text-white">
                         {r.vehicle?.name || r.vehicleType}
                       </td>
-                      <td className="p-4 font-bold text-white whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 font-bold text-white whitespace-nowrap">
                         {formatCurrency(r.totalAmount)}
                       </td>
-                      <td className="p-4 whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 whitespace-nowrap">
                         <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/10 text-white">
                           {reportType === 'revenue' ? r.paymentStatus : r.bookingStatus}
                         </span>
                       </td>
-                      <td className="p-4 text-right text-gray-400 whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 text-right text-gray-400 whitespace-nowrap">
                         {formatDate(r.createdAt)}
                       </td>
                     </tr>

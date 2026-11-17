@@ -136,7 +136,7 @@ export const getDashboardStats = async (req, res) => {
 
 export const getAdminVehicles = async (req, res) => {
   try {
-    const { search, category, vehicleType, status } = req.query;
+    const { search, category, vehicleType, status, page, limit } = req.query;
     const query = {};
 
     if (search) {
@@ -147,11 +147,25 @@ export const getAdminVehicles = async (req, res) => {
     if (vehicleType && vehicleType !== 'all') query.vehicleType = vehicleType;
     if (status && status !== 'all') query.status = status;
 
-    const vehicles = await Vehicle.find(query).sort({ createdAt: -1 });
+    const total = await Vehicle.countDocuments(query);
+    let queryBuilder = Vehicle.find(query).sort({ createdAt: -1 });
+
+    const pageNum = parseInt(page, 10);
+    const limitNum = parseInt(limit, 10);
+
+    if (pageNum && limitNum) {
+      const skip = (pageNum - 1) * limitNum;
+      queryBuilder = queryBuilder.skip(skip).limit(limitNum);
+    }
+
+    const vehicles = await queryBuilder;
 
     res.json({
       success: true,
       count: vehicles.length,
+      total,
+      totalPages: pageNum && limitNum ? Math.ceil(total / limitNum) : 1,
+      currentPage: pageNum || 1,
       vehicles,
     });
   } catch (error) {
@@ -246,9 +260,12 @@ export const toggleVehicleStatus = async (req, res) => {
 
 export const getAdminBookings = async (req, res) => {
   try {
-    const { status, paymentStatus, vehicleType, search } = req.query;
+    const { status, paymentStatus, vehicleType, rentalCategory, search } = req.query;
     const query = {};
 
+    if (rentalCategory && rentalCategory !== 'all') {
+      query.rentalCategory = rentalCategory;
+    }
     if (status && status !== 'all') query.bookingStatus = status;
     if (paymentStatus && paymentStatus !== 'all') query.paymentStatus = paymentStatus;
     if (vehicleType && vehicleType !== 'all') query.vehicleType = vehicleType;
@@ -260,17 +277,28 @@ export const getAdminBookings = async (req, res) => {
         { 'customerDetails.name': regex },
         { 'customerDetails.email': regex },
         { 'customerDetails.phone': regex },
+        { 'customerDetails.aadhaarNumber': regex },
+        { 'customerDetails.drivingLicenseNumber': regex },
       ];
     }
 
     const bookings = await Booking.find(query)
       .populate('customer', 'name email phone')
-      .populate('vehicle', 'name brand category images vehicleType pricePerDay')
+      .populate('vehicle', 'name brand category images vehicleType pricePerDay status availability')
       .sort({ createdAt: -1 });
+
+    const totalCount = await Booking.countDocuments();
+    const selfDriveCount = await Booking.countDocuments({ rentalCategory: 'self_drive' });
+    const withDriverCount = await Booking.countDocuments({ rentalCategory: 'with_driver' });
 
     res.json({
       success: true,
       count: bookings.length,
+      counts: {
+        all: totalCount,
+        self_drive: selfDriveCount,
+        with_driver: withDriverCount,
+      },
       bookings,
     });
   } catch (error) {

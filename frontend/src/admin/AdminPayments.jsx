@@ -26,7 +26,7 @@ const AdminPayments = () => {
   }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       <div>
         <span className="text-xs font-bold text-brand-primary uppercase tracking-wider">
           Financial Ledger
@@ -37,7 +37,7 @@ const AdminPayments = () => {
         </p>
       </div>
 
-      <div className="glass-panel rounded-3xl border border-white/10 overflow-hidden">
+      <div className="glass-panel rounded-2xl border border-white/10 overflow-hidden">
         {loading ? (
           <LoadingSpinner />
         ) : (
@@ -45,13 +45,13 @@ const AdminPayments = () => {
             <table className="w-full text-left text-xs text-gray-300">
               <thead className="text-[11px] uppercase tracking-wider text-gray-400 bg-white/5 border-b border-white/10">
                 <tr>
-                  <th className="p-4">Transaction / Razorpay ID</th>
-                  <th className="p-4">Customer</th>
-                  <th className="p-4">Booking Ref</th>
-                  <th className="p-4">Amount</th>
-                  <th className="p-4">Method</th>
-                  <th className="p-4">Status</th>
-                  <th className="p-4 text-right">Date</th>
+                  <th className="p-3 sm:p-3.5">Transaction / Razorpay ID</th>
+                  <th className="p-3 sm:p-3.5">Customer</th>
+                  <th className="p-3 sm:p-3.5">Booking Ref</th>
+                  <th className="p-3 sm:p-3.5">Amount</th>
+                  <th className="p-3 sm:p-3.5">Method</th>
+                  <th className="p-3 sm:p-3.5">Status</th>
+                  <th className="p-3 sm:p-3.5 text-right">Date</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -64,28 +64,28 @@ const AdminPayments = () => {
                 ) : (
                   payments.map((p) => (
                     <tr key={p._id} className="hover:bg-white/5 transition-colors">
-                      <td className="p-4 font-mono font-bold text-white whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 font-mono font-bold text-white whitespace-nowrap">
                         {p.transactionId}
                       </td>
 
-                      <td className="p-4">
+                      <td className="p-3 sm:p-3.5">
                         <p className="font-semibold text-white">{p.customer?.name || 'Customer'}</p>
                         <p className="text-[11px] text-gray-400">{p.customer?.email}</p>
                       </td>
 
-                      <td className="p-4 font-bold text-brand-primary whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 font-bold text-brand-primary whitespace-nowrap">
                         {p.booking?.bookingReference || 'N/A'}
                       </td>
 
-                      <td className="p-4 font-black text-white whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 font-black text-white whitespace-nowrap">
                         {formatCurrency(p.amount)}
                       </td>
 
-                      <td className="p-4 text-gray-300 whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 text-gray-300 whitespace-nowrap">
                         {p.paymentMethod}
                       </td>
 
-                      <td className="p-4 whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 whitespace-nowrap">
                         <span
                           className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                             p.status === 'Paid'
@@ -97,7 +97,7 @@ const AdminPayments = () => {
                         </span>
                       </td>
 
-                      <td className="p-4 text-right text-gray-400 whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 text-right text-gray-400 whitespace-nowrap">
                         {formatDate(p.createdAt)}
                       </td>
                     </tr>

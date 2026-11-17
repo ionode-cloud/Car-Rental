@@ -46,7 +46,7 @@ const AdminReviews = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       <div>
         <span className="text-xs font-bold text-brand-primary uppercase tracking-wider">
           Reputation & Social Proof
@@ -57,7 +57,7 @@ const AdminReviews = () => {
         </p>
       </div>
 
-      <div className="glass-panel rounded-3xl border border-white/10 overflow-hidden">
+      <div className="glass-panel rounded-2xl border border-white/10 overflow-hidden">
         {loading ? (
           <LoadingSpinner />
         ) : (
@@ -65,13 +65,13 @@ const AdminReviews = () => {
             <table className="w-full text-left text-xs text-gray-300">
               <thead className="text-[11px] uppercase tracking-wider text-gray-400 bg-white/5 border-b border-white/10">
                 <tr>
-                  <th className="p-4">Customer</th>
-                  <th className="p-4">Vehicle</th>
-                  <th className="p-4">Rating</th>
-                  <th className="p-4">Review Content</th>
-                  <th className="p-4">Date</th>
-                  <th className="p-4">Status</th>
-                  <th className="p-4 text-right">Moderation</th>
+                  <th className="p-3 sm:p-3.5">Customer</th>
+                  <th className="p-3 sm:p-3.5">Vehicle</th>
+                  <th className="p-3 sm:p-3.5">Rating</th>
+                  <th className="p-3 sm:p-3.5">Review Content</th>
+                  <th className="p-3 sm:p-3.5">Date</th>
+                  <th className="p-3 sm:p-3.5">Status</th>
+                  <th className="p-3 sm:p-3.5 text-right">Moderation</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -84,30 +84,30 @@ const AdminReviews = () => {
                 ) : (
                   reviews.map((r) => (
                     <tr key={r._id} className="hover:bg-white/5 transition-colors">
-                      <td className="p-4 font-bold text-white whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 font-bold text-white whitespace-nowrap">
                         {r.customerName || r.customer?.name}
                       </td>
 
-                      <td className="p-4 text-gray-300 whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 text-gray-300 whitespace-nowrap">
                         {r.vehicle?.name || r.vehicleName || 'Fleet Rental'}
                       </td>
 
-                      <td className="p-4 whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 whitespace-nowrap">
                         <div className="flex items-center gap-1 text-amber-400 font-bold">
                           <Star className="w-3.5 h-3.5 fill-amber-400" />
                           <span>{r.rating} / 5</span>
                         </div>
                       </td>
 
-                      <td className="p-4 max-w-xs text-gray-300 line-clamp-2">
+                      <td className="p-3 sm:p-3.5 max-w-xs text-gray-300 line-clamp-2">
                         "{r.comment}"
                       </td>
 
-                      <td className="p-4 text-gray-400 whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 text-gray-400 whitespace-nowrap">
                         {formatDate(r.createdAt)}
                       </td>
 
-                      <td className="p-4 whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 whitespace-nowrap">
                         <span
                           className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${
                             r.status === 'approved'
@@ -121,7 +121,7 @@ const AdminReviews = () => {
                         </span>
                       </td>
 
-                      <td className="p-4 text-right whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end gap-1.5">
                           {r.status !== 'approved' && (
                             <button

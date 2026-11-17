@@ -72,13 +72,13 @@ const SearchBar = ({ initialType = 'all', compact = false }) => {
   const todayStr = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="w-full glass-panel rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/15">
+    <div className="w-full glass-panel rounded-2xl p-3.5 sm:p-5 shadow-2xl border border-white/15">
       {/* Type Switcher Tabs */}
-      <div className="flex items-center gap-2 mb-4 pb-3 border-b border-white/10">
+      <div className="flex items-center gap-2 mb-3 pb-2.5 border-b border-white/10">
         <button
           type="button"
           onClick={() => handleTypeSelect('all')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
             formData.vehicleType === 'all'
               ? 'bg-brand-primary text-white shadow-primary-glow'
               : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
@@ -91,7 +91,7 @@ const SearchBar = ({ initialType = 'all', compact = false }) => {
         <button
           type="button"
           onClick={() => handleTypeSelect('car')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
             formData.vehicleType === 'car'
               ? 'bg-brand-primary text-white shadow-primary-glow'
               : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
@@ -104,7 +104,7 @@ const SearchBar = ({ initialType = 'all', compact = false }) => {
         <button
           type="button"
           onClick={() => handleTypeSelect('scooty')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
             formData.vehicleType === 'scooty'
               ? 'bg-brand-primary text-white shadow-primary-glow'
               : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
@@ -115,7 +115,7 @@ const SearchBar = ({ initialType = 'all', compact = false }) => {
         </button>
       </div>
 
-      <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+      <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-3">
         {/* Pickup Location */}
         <div className="bg-brand-dark/80 border border-white/10 rounded-2xl p-3 focus-within:border-brand-primary/60 transition-colors">
           <label className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1.5 mb-1">
@@ -222,9 +222,9 @@ const SearchBar = ({ initialType = 'all', compact = false }) => {
         <div className="flex items-center">
           <button
             type="submit"
-            className="orange-gradient-btn w-full h-[58px] rounded-2xl text-white font-bold text-base tracking-wide flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] transition-transform"
+            className="orange-gradient-btn w-full h-[48px] sm:h-[50px] rounded-xl text-white font-bold text-sm sm:text-base tracking-wide flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] transition-transform"
           >
-            <Search className="w-5 h-5" />
+            <Search className="w-4 h-4 sm:w-5 sm:h-5" />
             <span>Find Your Ride</span>
           </button>
         </div>

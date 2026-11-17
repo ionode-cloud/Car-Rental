@@ -21,6 +21,7 @@ import {
   ChevronLeft,
   ChevronRight,
   LogIn,
+  UserPlus,
 } from 'lucide-react';
 
 const Navbar = () => {
@@ -73,6 +74,9 @@ const Navbar = () => {
     { name: 'Vehicles', path: '/vehicles', icon: Car },
     { name: 'About Us', path: '/about-us', icon: Info },
     { name: 'Contact Us', path: '/contact-us', icon: Phone },
+    ...(isAuthenticated
+      ? [{ name: 'My Bookings', path: '/my-account', icon: CalendarCheck }]
+      : []),
   ];
 
   return (
@@ -159,8 +163,18 @@ const Navbar = () => {
                 </div>
               </motion.a>
 
-              {/* User Dropdown or Login */}
-              {isAuthenticated ? (
+              {/* Sign Up Button (after Need Help? when not authenticated) */}
+              {!isAuthenticated ? (
+                <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
+                  <Link
+                    to="/register"
+                    className="btn-theme-gradient shine-sweep text-white text-xs font-bold px-3.5 py-1.5 rounded-xl shadow-xs hover:shadow-md transition-all flex items-center gap-1.5"
+                  >
+                    <UserPlus className="w-3.5 h-3.5" />
+                    <span>Sign Up</span>
+                  </Link>
+                </motion.div>
+              ) : (
                 <div className="relative">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
@@ -229,36 +243,11 @@ const Navbar = () => {
                     )}
                   </AnimatePresence>
                 </div>
-              ) : (
-                <Link
-                  to="/login"
-                  className="text-xs font-semibold text-[#151515] hover:text-brand-primary px-2 py-1.5 transition-colors"
-                >
-                  Sign In
-                </Link>
               )}
-
-              {/* Book Your Car button */}
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link
-                  to="/vehicles"
-                  className="px-3.5 py-1.5 rounded-lg btn-theme-gradient shine-sweep text-white text-xs font-bold tracking-wide transition-all shadow-primary-glow inline-block"
-                >
-                  Book Your Car
-                </Link>
-              </motion.div>
             </div>
 
-            {/* Mobile: Quick CTA + 3-Bar Hamburger Button */}
+            {/* Mobile: 3-Bar Hamburger Button */}
             <div className="flex items-center gap-2 md:hidden">
-              <Link
-                to="/vehicles"
-                className="px-3 py-1.5 rounded-xl btn-theme-gradient text-white text-xs font-bold shadow-xs"
-              >
-                Book Car
-              </Link>
-
-              {/* 3-Bar Hamburger Trigger Button */}
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(true)}
@@ -417,14 +406,24 @@ const Navbar = () => {
                     <span>Logout</span>
                   </button>
                 ) : (
-                  <Link
-                    to="/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3.5 px-3.5 py-2 rounded-2xl text-xs font-semibold text-brand-primary hover:bg-brand-primaryLight w-full transition-colors"
-                  >
-                    <LogIn className="w-4 h-4 shrink-0" />
-                    <span>Sign In / Register</span>
-                  </Link>
+                  <div className="space-y-2">
+                    <Link
+                      to="/register"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="btn-theme-gradient text-white flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-2xl text-xs font-bold shadow-md transition-all text-center w-full"
+                    >
+                      <UserPlus className="w-4 h-4 shrink-0" />
+                      <span>Sign Up</span>
+                    </Link>
+                    <Link
+                      to="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center justify-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-semibold text-gray-700 hover:bg-gray-100 transition-colors text-center w-full"
+                    >
+                      <LogIn className="w-4 h-4 shrink-0" />
+                      <span>Sign In</span>
+                    </Link>
+                  </div>
                 )}
 
                 {/* Theme Mode Toggle with White Theme styling */}

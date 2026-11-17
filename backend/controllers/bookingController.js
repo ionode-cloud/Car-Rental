@@ -6,34 +6,122 @@ import { sendBookingConfirmationEmail } from '../utils/emailService.js';
 import { generateInvoicePDF } from '../utils/invoiceGenerator.js';
 
 /**
- * @desc    Create a new vehicle booking
+ * Helper to compute return datetime from pickup date, pickup time, and duration
+ */
+const computeReturnDateTime = (pickupDateStr, pickupTimeStr, durationTier, estimatedHours, customDays) => {
+  const pDate = new Date(pickupDateStr);
+  let [timePart, meridiem] = (pickupTimeStr || '10:00 AM').split(' ');
+  let [hours, minutes] = (timePart || '10:00').split(':').map(Number);
+  if (meridiem && meridiem.toUpperCase() === 'PM' && hours < 12) hours += 12;
+  if (meridiem && meridiem.toUpperCase() === 'AM' && hours === 12) hours = 0;
+
+  pDate.setHours(hours, minutes || 0, 0, 0);
+
+  let durationHours = 24;
+
+  const daysMatch = String(durationTier).match(/^(\d+)\s*Days?$/i);
+  if (customDays && Number(customDays) > 0) {
+    durationHours = Number(customDays) * 24;
+  } else if (daysMatch) {
+    durationHours = Number(daysMatch[1]) * 24;
+  } else if (durationTier === '4 Hours') {
+    durationHours = 4;
+  } else if (durationTier === '8 Hours') {
+    durationHours = 8;
+  } else if (durationTier === '12 Hours') {
+    durationHours = 12;
+  } else if (durationTier === '24 Hours' || durationTier === '1 Day') {
+    durationHours = 24;
+  } else if (estimatedHours && Number(estimatedHours) > 0) {
+    durationHours = Math.max(4, Number(estimatedHours));
+  }
+
+  const rDate = new Date(pDate.getTime() + durationHours * 60 * 60 * 1000);
+
+  // Return formatted time string
+  const rHours = rDate.getHours();
+  const rMinutes = rDate.getMinutes().toString().padStart(2, '0');
+  const rMeridiem = rHours >= 12 ? 'PM' : 'AM';
+  const displayHours = rHours % 12 === 0 ? 12 : rHours % 12;
+  const returnTimeStr = `${displayHours}:${rMinutes} ${rMeridiem}`;
+
+  return {
+    startDateTime: pDate,
+    endDateTime: rDate,
+    returnTimeStr,
+    durationHours,
+  };
+};
+
+/**
+ * @desc    Create a new vehicle booking (Self Drive or Driving with Driver)
  * @route   POST /api/bookings
  * @access  Private (Authenticated Customer)
  */
 export const createBooking = async (req, res) => {
   try {
     const {
+      rentalCategory = 'self_drive', // 'self_drive' or 'with_driver'
       vehicleId,
       pickupLocation,
+      dropLocation,
       returnLocation,
       pickupDate,
-      pickupTime,
-      returnDate,
-      returnTime,
+      pickupTime = '10:00 AM',
+      returnDate: clientReturnDate,
+      returnTime: clientReturnTime,
+      durationTier = '24 Hours',
+      estimatedHours = 0,
+      customDays = 0,
       customerName,
       phone,
       email,
+      aadhaarNumber,
+      aadhaarDocument,
       drivingLicenseNumber,
+      drivingLicenseDocument,
       additionalNotes,
       couponCode,
-      paymentMethod = 'Razorpay',
+      paymentMethod = 'Pay at Pickup',
     } = req.body;
 
-    if (!vehicleId || !pickupLocation || !returnLocation || !pickupDate || !returnDate) {
+    // Basic validation
+    if (!vehicleId) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide all required booking details (vehicle, dates, and locations).',
+        message: 'Please select a vehicle to proceed with booking.',
       });
+    }
+
+    if (!pickupLocation || !pickupDate) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide pickup location and pickup date & time.',
+      });
+    }
+
+    if (!customerName || !phone) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide full name and WhatsApp mobile number.',
+      });
+    }
+
+    // Category-specific validations
+    if (rentalCategory === 'self_drive') {
+      if (!drivingLicenseNumber || !drivingLicenseNumber.trim()) {
+        return res.status(400).json({
+          success: false,
+          message: 'Driving Licence Number is required for Self Drive booking.',
+        });
+      }
+    } else if (rentalCategory === 'with_driver') {
+      if (!dropLocation || !dropLocation.trim()) {
+        return res.status(400).json({
+          success: false,
+          message: 'Drop Location is required for Driving with Driver booking.',
+        });
+      }
     }
 
     const vehicle = await Vehicle.findById(vehicleId);
@@ -44,24 +132,57 @@ export const createBooking = async (req, res) => {
       });
     }
 
-    const pDate = new Date(pickupDate);
-    const rDate = new Date(returnDate);
+    // Compute dates and timeframe from custom dates
+    let startDateTime;
+    let endDateTime;
+    let computedReturnTime = clientReturnTime || '10:00 AM';
 
-    if (pDate >= rDate) {
+    if (clientReturnDate) {
+      let [pTimePart, pMer] = (pickupTime || '10:00 AM').split(' ');
+      let [pH, pM] = (pTimePart || '10:00').split(':').map(Number);
+      if (pMer && pMer.toUpperCase() === 'PM' && pH < 12) pH += 12;
+      if (pMer && pMer.toUpperCase() === 'AM' && pH === 12) pH = 0;
+      startDateTime = new Date(pickupDate);
+      startDateTime.setHours(pH, pM || 0, 0, 0);
+
+      let [rTimePart, rMer] = (clientReturnTime || '10:00 AM').split(' ');
+      let [rH, rM] = (rTimePart || '10:00').split(':').map(Number);
+      if (rMer && rMer.toUpperCase() === 'PM' && rH < 12) rH += 12;
+      if (rMer && rMer.toUpperCase() === 'AM' && rH === 12) rH = 0;
+      endDateTime = new Date(clientReturnDate);
+      endDateTime.setHours(rH, rM || 0, 0, 0);
+      computedReturnTime = clientReturnTime || '10:00 AM';
+    } else {
+      const computed = computeReturnDateTime(pickupDate, pickupTime, durationTier, estimatedHours, customDays);
+      startDateTime = computed.startDateTime;
+      endDateTime = computed.endDateTime;
+      computedReturnTime = computed.returnTimeStr;
+    }
+
+    if (startDateTime >= endDateTime) {
       return res.status(400).json({
         success: false,
-        message: 'Return date must be strictly after pickup date.',
+        message: 'Return date/time must be strictly after pickup date/time.',
       });
     }
 
-    // Availability check — prevent overlapping confirmed/active/pending bookings
+    // Minimum rental duration check (minimum 4 hours)
+    const diffHours = (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60);
+    if (diffHours < 3.99) {
+      return res.status(400).json({
+        success: false,
+        message: 'Minimum rental duration is 4 hours.',
+      });
+    }
+
+    // Double Booking Prevention: Check overlapping bookings
     const existingConflict = await Booking.findOne({
       vehicle: vehicleId,
-      bookingStatus: { $in: ['Confirmed', 'Active', 'Pending'] },
+      bookingStatus: { $in: ['Pending', 'Confirmed', 'Ongoing', 'Active'] },
       $or: [
         {
-          pickupDate: { $lte: rDate },
-          returnDate: { $gte: pDate },
+          pickupDate: { $lt: endDateTime },
+          returnDate: { $gt: startDateTime },
         },
       ],
     });
@@ -69,11 +190,12 @@ export const createBooking = async (req, res) => {
     if (existingConflict) {
       return res.status(400).json({
         success: false,
-        message: 'This vehicle is already reserved for the selected dates. Please choose another vehicle or timeframe.',
+        message:
+          'This vehicle is already reserved for the selected dates and time slot. Please choose another vehicle or timeframe.',
       });
     }
 
-    // Check optional coupon
+    // Optional Coupon Check
     let coupon = null;
     if (couponCode && couponCode.trim()) {
       coupon = await Coupon.findOne({
@@ -87,56 +209,98 @@ export const createBooking = async (req, res) => {
       }
     }
 
-    // Re-calculate price on server side
+    // Calculate Price Breakdown
     const priceBreakdown = calculateBookingPrice({
       vehicle,
-      pickupDate: pDate,
-      returnDate: rDate,
+      rentalCategory,
+      durationTier,
+      estimatedHours,
+      customDays,
+      pickupDate: startDateTime,
+      returnDate: endDateTime,
       coupon,
     });
 
-    // Generate unique booking reference
+    // Generate unique reference ID
+    const prefix = rentalCategory === 'with_driver' ? 'RV-DR' : 'RV-SD';
     const timestamp = Date.now().toString(36).toUpperCase();
     const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-    const bookingReference = `RV-${timestamp}-${randomSuffix}`;
+    const bookingReference = `${prefix}-${timestamp}-${randomSuffix}`;
+
+    const effectiveReturnLocation = dropLocation || returnLocation || pickupLocation;
 
     const newBooking = await Booking.create({
       bookingReference,
+      rentalCategory,
       customer: req.user._id,
       vehicle: vehicle._id,
-      vehicleType: vehicle.vehicleType,
+      vehicleType: vehicle.vehicleType || 'car',
       pickupLocation,
-      returnLocation,
-      pickupDate: pDate,
+      dropLocation: effectiveReturnLocation,
+      returnLocation: effectiveReturnLocation,
+      pickupDate: startDateTime,
       pickupTime: pickupTime || '10:00 AM',
-      returnDate: rDate,
-      returnTime: returnTime || '10:00 AM',
+      returnDate: endDateTime,
+      returnTime: computedReturnTime,
       rentalDuration: {
+        tier: durationTier || `${priceBreakdown.rentalDays * 24} Hours`,
         days: priceBreakdown.rentalDays,
-        hours: 0,
+        hours: priceBreakdown.hours,
       },
+      driverIncluded: rentalCategory === 'with_driver',
       customerDetails: {
         name: customerName || req.user.name,
         email: email || req.user.email,
         phone: phone || req.user.phone,
+        aadhaarNumber: aadhaarNumber || '',
+        aadhaarDocument: aadhaarDocument || '',
         drivingLicenseNumber: drivingLicenseNumber || '',
+        drivingLicenseDocument: drivingLicenseDocument || '',
         additionalNotes: additionalNotes || '',
       },
       priceBreakdown,
       totalAmount: priceBreakdown.finalAmount,
       paymentMethod,
       paymentStatus: paymentMethod === 'Cash' || paymentMethod === 'Pay at Pickup' ? 'Pending' : 'Pending',
-      bookingStatus: 'Confirmed', // Mark confirmed on booking placement
+      bookingStatus: 'Confirmed', // Confirmed on booking
       statusHistory: [
         {
           status: 'Confirmed',
-          note: `Booking placed with ${paymentMethod} payment method.`,
-          updatedBy: req.user.name,
+          note: `Booking placed successfully for ${rentalCategory === 'with_driver' ? 'Driving with Driver' : 'Self Drive'} (${durationTier}).`,
+          updatedBy: req.user.name || 'Customer',
         },
       ],
     });
 
-    // Fire & forget confirmation email
+    // Populate vehicle for response
+    await newBooking.populate('vehicle', 'name brand model images vehicleType category pricePerDay');
+
+    // Build direct WhatsApp confirmation message
+    const cleanPhone = (phone || req.user.phone || '').replace(/\D/g, '');
+    const phoneWithCountry = cleanPhone.startsWith('91') ? cleanPhone : `91${cleanPhone}`;
+    const categoryName = rentalCategory === 'with_driver' ? 'Driving with Driver' : 'Self Drive';
+    const formattedDate = new Date(startDateTime).toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
+
+    const whatsappMessage = `🚗 *Booking Confirmed - RideVista Mobility*
+━━━━━━━━━━━━━━━━━━━━
+📌 *Booking ID:* ${bookingReference}
+🚘 *Category:* ${categoryName}
+🚙 *Vehicle:* ${vehicle.brand} ${vehicle.name}
+📍 *Pickup:* ${pickupLocation}
+${rentalCategory === 'with_driver' ? `🏁 *Drop:* ${effectiveReturnLocation}\n` : ''}📅 *Date & Time:* ${formattedDate} at ${pickupTime}
+⏱ *Duration:* ${durationTier}
+💰 *Total Fare:* ₹${priceBreakdown.finalAmount.toLocaleString('en-IN')}
+🛡️ *Security Deposit:* ₹0 (100% No Deposit)
+━━━━━━━━━━━━━━━━━━━━
+Thank you for booking with us! Have a safe journey!`;
+
+    const whatsappUrl = `https://wa.me/${phoneWithCountry}?text=${encodeURIComponent(whatsappMessage)}`;
+
+    // Fire confirmation email in background
     sendBookingConfirmationEmail(newBooking, req.user, vehicle).catch((err) =>
       console.warn('Booking email notification log:', err.message)
     );
@@ -145,6 +309,7 @@ export const createBooking = async (req, res) => {
       success: true,
       message: 'Booking placed successfully!',
       booking: newBooking,
+      whatsappUrl,
     });
   } catch (error) {
     res.status(500).json({
@@ -162,7 +327,10 @@ export const createBooking = async (req, res) => {
 export const getMyBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({ customer: req.user._id })
-      .populate('vehicle', 'name brand model images vehicleType category pricePerDay fuelType transmission seatingCapacity registrationNumber features')
+      .populate(
+        'vehicle',
+        'name brand model images vehicleType category pricePerDay fuelType transmission seatingCapacity registrationNumber features'
+      )
       .sort({ createdAt: -1 });
 
     res.json({
@@ -197,10 +365,8 @@ export const getBookingById = async (req, res) => {
     }
 
     // Access check: User must be either the owner or an admin
-    if (
-      booking.customer._id.toString() !== req.user._id.toString() &&
-      req.user.role !== 'admin'
-    ) {
+    const customerId = booking.customer?._id?.toString() || booking.customer?.toString();
+    if (customerId !== req.user._id.toString() && req.user.role !== 'admin') {
       return res.status(403).json({
         success: false,
         message: 'Unauthorized access to this booking record.',

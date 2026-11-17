@@ -54,9 +54,9 @@ const AdminSettings = () => {
         )}
       </div>
 
-      <form onSubmit={handleSave} className="space-y-6">
+      <form onSubmit={handleSave} className="space-y-4 sm:space-y-5">
         {/* Company Identity */}
-        <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-4">
+        <div className="glass-panel p-4 sm:p-5 rounded-2xl border border-white/10 space-y-3">
           <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
             <Building2 className="w-4 h-4 text-brand-primary" />
             Company & Statutory Details
@@ -123,7 +123,7 @@ const AdminSettings = () => {
         </div>
 
         {/* Rental & Pricing Parameters */}
-        <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-4">
+        <div className="glass-panel p-4 sm:p-5 rounded-2xl border border-white/10 space-y-3">
           <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
             <Sliders className="w-4 h-4 text-brand-primary" />
             Pricing, GST & Deposit Defaults
@@ -170,7 +170,7 @@ const AdminSettings = () => {
         </div>
 
         {/* Payment Gateway Controls */}
-        <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-4">
+        <div className="glass-panel p-4 sm:p-5 rounded-2xl border border-white/10 space-y-3">
           <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
             <CreditCard className="w-4 h-4 text-brand-primary" />
             Active Payment Channels

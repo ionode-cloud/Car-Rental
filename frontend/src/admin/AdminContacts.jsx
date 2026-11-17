@@ -46,7 +46,7 @@ const AdminContacts = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       <div>
         <span className="text-xs font-bold text-brand-primary uppercase tracking-wider">
           Concierge Inbox
@@ -57,7 +57,7 @@ const AdminContacts = () => {
         </p>
       </div>
 
-      <div className="glass-panel rounded-3xl border border-white/10 overflow-hidden">
+      <div className="glass-panel rounded-2xl border border-white/10 overflow-hidden">
         {loading ? (
           <LoadingSpinner />
         ) : (
@@ -65,13 +65,13 @@ const AdminContacts = () => {
             <table className="w-full text-left text-xs text-gray-300">
               <thead className="text-[11px] uppercase tracking-wider text-gray-400 bg-white/5 border-b border-white/10">
                 <tr>
-                  <th className="p-4">Sender</th>
-                  <th className="p-4">Contact Info</th>
-                  <th className="p-4">Subject</th>
-                  <th className="p-4">Inquiry Message</th>
-                  <th className="p-4">Date</th>
-                  <th className="p-4">Status</th>
-                  <th className="p-4 text-right">Actions</th>
+                  <th className="p-3 sm:p-3.5">Sender</th>
+                  <th className="p-3 sm:p-3.5">Contact Info</th>
+                  <th className="p-3 sm:p-3.5">Subject</th>
+                  <th className="p-3 sm:p-3.5">Inquiry Message</th>
+                  <th className="p-3 sm:p-3.5">Date</th>
+                  <th className="p-3 sm:p-3.5">Status</th>
+                  <th className="p-3 sm:p-3.5 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -84,28 +84,28 @@ const AdminContacts = () => {
                 ) : (
                   contacts.map((c) => (
                     <tr key={c._id} className="hover:bg-white/5 transition-colors">
-                      <td className="p-4 font-bold text-white whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 font-bold text-white whitespace-nowrap">
                         {c.name}
                       </td>
 
-                      <td className="p-4">
+                      <td className="p-3 sm:p-3.5">
                         <p className="text-gray-200">{c.email}</p>
                         <p className="text-[11px] font-mono text-gray-400">{c.phone}</p>
                       </td>
 
-                      <td className="p-4 font-semibold text-brand-primary whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 font-semibold text-brand-primary whitespace-nowrap">
                         {c.subject}
                       </td>
 
-                      <td className="p-4 text-gray-300 max-w-sm">
+                      <td className="p-3 sm:p-3.5 text-gray-300 max-w-sm">
                         {c.message}
                       </td>
 
-                      <td className="p-4 text-gray-400 whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 text-gray-400 whitespace-nowrap">
                         {formatDate(c.createdAt)}
                       </td>
 
-                      <td className="p-4 whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 whitespace-nowrap">
                         <span
                           className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${
                             c.status === 'resolved'
@@ -119,7 +119,7 @@ const AdminContacts = () => {
                         </span>
                       </td>
 
-                      <td className="p-4 text-right whitespace-nowrap">
+                      <td className="p-3 sm:p-3.5 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end gap-1.5">
                           {c.status !== 'resolved' && (
                             <button

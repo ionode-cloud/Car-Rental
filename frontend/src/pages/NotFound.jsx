@@ -4,10 +4,10 @@ import { Car, ArrowLeft, Home } from 'lucide-react';
 
 const NotFound = () => {
   return (
-    <div className="min-h-screen bg-brand-black text-white flex items-center justify-center px-4 py-24 text-center">
-      <div className="max-w-md w-full glass-panel p-10 rounded-3xl border border-white/10 space-y-6">
-        <div className="w-16 h-16 rounded-3xl bg-brand-primary/20 text-brand-primary flex items-center justify-center mx-auto">
-          <Car className="w-8 h-8" />
+    <div className="min-h-screen bg-brand-black text-white flex items-center justify-center px-4 py-12 sm:py-16 text-center">
+      <div className="max-w-md w-full glass-panel p-6 sm:p-8 rounded-2xl border border-white/10 space-y-4">
+        <div className="w-14 h-14 rounded-2xl bg-brand-primary/20 text-brand-primary flex items-center justify-center mx-auto">
+          <Car className="w-7 h-7" />
         </div>
         <h1 className="text-6xl font-black text-brand-primary tracking-tight">404</h1>
         <h2 className="text-2xl font-bold text-white">Route Not Found</h2>

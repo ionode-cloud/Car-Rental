@@ -12,7 +12,17 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    const returnTarget = `${location.pathname}${location.search || ''}${location.hash || ''}`;
+    return (
+      <Navigate
+        to="/register"
+        state={{
+          from: returnTarget,
+          message: 'Please register or log in to complete your booking.',
+        }}
+        replace
+      />
+    );
   }
 
   return children;

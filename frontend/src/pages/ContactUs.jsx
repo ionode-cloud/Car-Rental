@@ -84,7 +84,7 @@ const ContactUs = () => {
   return (
     <div className="bg-white min-h-screen text-[#151515] pb-12 w-full">
       {/* ==================== 1. FULL WIDTH HEADER ==================== */}
-      <div className="w-full bg-[#F8F8FA] border-b border-[#EAEAEA] py-10 mb-12 rounded-none">
+      <div className="w-full bg-[#F8F8FA] border-b border-[#EAEAEA] py-7 mb-6 rounded-none">
         <div className="container-fluid text-center">
           <h1 className="text-3xl sm:text-4xl font-extrabold text-[#151515] font-heading">
             Contact Us
@@ -100,7 +100,7 @@ const ContactUs = () => {
 
       <div className="container-fluid">
         {/* ==================== 2. MAIN 2-COLUMN LAYOUT ==================== */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-stretch mb-8">
           {/* Left Column: Purple Form Card */}
           <motion.div
             initial={{ opacity: 0, x: -35 }}
@@ -246,7 +246,7 @@ const ContactUs = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-6 py-8 border-y border-[#EAEAEA] mb-16"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 py-6 border-y border-[#EAEAEA] mb-8"
         >
           {/* Address */}
           <motion.div
@@ -334,8 +334,8 @@ const ContactUs = () => {
         </motion.div>
 
         {/* ==================== 4. LATEST BLOG POSTS & NEWS ==================== */}
-        <div className="mb-16">
-          <div className="text-center mb-10">
+        <div className="mb-8">
+          <div className="text-center mb-5">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#151515] font-heading">
               Latest blog posts & news
             </h2>
@@ -344,7 +344,7 @@ const ContactUs = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             {BLOG_POSTS.map((post, idx) => (
               <motion.div
                 key={post.id}
@@ -386,7 +386,7 @@ const ContactUs = () => {
       </div>
 
       {/* ==================== 5. FULL WIDTH BRAND LOGO STRIP ==================== */}
-      <div className="w-full bg-[#F8F8FA] border-t border-[#EAEAEA] py-12 mt-16 rounded-none">
+      <div className="w-full bg-[#F8F8FA] border-t border-[#EAEAEA] py-8 mt-8 rounded-none">
         <div className="container-fluid">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

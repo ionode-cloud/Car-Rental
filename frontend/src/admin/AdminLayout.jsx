@@ -7,7 +7,6 @@ import ThemeSwitcher from '../components/ThemeSwitcher';
 import {
   LayoutDashboard,
   Car,
-  PlusCircle,
   CalendarCheck,
   Users,
   CreditCard,
@@ -57,7 +56,6 @@ const AdminLayout = () => {
   const menuItems = [
     { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
     { name: 'Vehicles', path: '/admin/vehicles', icon: Car },
-    { name: 'Add Vehicle', path: '/admin/vehicles/add', icon: PlusCircle },
     { name: 'Bookings', path: '/admin/bookings', icon: CalendarCheck },
     { name: 'Customers', path: '/admin/customers', icon: Users },
     { name: 'Payments', path: '/admin/payments', icon: CreditCard },
@@ -75,16 +73,16 @@ const AdminLayout = () => {
     : menuItems;
 
   return (
-    <div className="min-h-screen bg-brand-black text-white flex">
-      {/* Desktop Fixed Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 bg-brand-dark border-r border-white/10 shrink-0 select-none">
+    <div className="h-screen bg-[#F4F5F8] text-[#151515] flex overflow-hidden">
+      {/* Desktop Fixed Left Sidebar */}
+      <aside className="hidden lg:flex flex-col w-64 h-screen bg-white border-r border-gray-200/80 shrink-0 select-none shadow-xs z-20">
         {/* Brand Header */}
-        <div className="p-6 border-b border-white/10 flex items-center gap-3">
+        <div className="p-5 border-b border-gray-100 flex items-center gap-3 shrink-0">
           <div className="w-10 h-10 rounded-xl theme-hero-gradient flex items-center justify-center text-white shadow-primary-glow font-bold">
             <Car className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xl font-black text-white tracking-tight">
+            <span className="text-xl font-black text-[#151515] tracking-tight">
               RIDE<span className="text-brand-primary">VISTA</span>
             </span>
             <span className="block text-[10px] font-bold text-gray-400 tracking-widest uppercase">
@@ -93,8 +91,8 @@ const AdminLayout = () => {
           </div>
         </div>
 
-        {/* Navigation Links */}
-        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+        {/* Navigation Links - Fixed & clean without visible scrollbar */}
+        <nav className="flex-1 p-3.5 space-y-1 overflow-y-auto no-scrollbar">
           {menuItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -104,8 +102,8 @@ const AdminLayout = () => {
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                     isActive
-                      ? 'bg-brand-primary text-white shadow-primary-glow'
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                      ? 'bg-brand-primary text-white shadow-primary-glow font-bold'
+                      : 'text-gray-600 hover:text-[#151515] hover:bg-gray-100'
                   }`
                 }
               >
@@ -117,17 +115,17 @@ const AdminLayout = () => {
         </nav>
 
         {/* Sidebar Footer with Logout & Live Site Link */}
-        <div className="p-4 border-t border-white/10 space-y-2">
+        <div className="p-3.5 border-t border-gray-100 space-y-2 shrink-0 bg-white">
           <Link
             to="/"
             target="_blank"
-            className="flex items-center justify-center gap-2 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-semibold text-gray-300 w-full transition-colors"
+            className="flex items-center justify-center gap-2 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-700 w-full transition-colors"
           >
             <span>View Public Website</span>
           </Link>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-red-400 hover:bg-red-500/10 w-full text-left transition-colors"
+            className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-red-500 hover:bg-red-50 w-full text-left transition-colors cursor-pointer"
           >
             <LogOut className="w-4 h-4 shrink-0" />
             <span>Sign Out</span>
@@ -136,22 +134,22 @@ const AdminLayout = () => {
       </aside>
 
       {/* Main Content Column */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col h-screen min-w-0 overflow-hidden">
         {/* Top Navbar */}
-        <header className="h-14 sm:h-16 bg-brand-dark/90 backdrop-blur-md border-b border-white/10 px-3.5 sm:px-6 lg:px-8 flex items-center justify-between sticky top-0 z-30">
+        <header className="h-14 sm:h-16 bg-white/90 backdrop-blur-md border-b border-gray-200/80 px-3.5 sm:px-6 lg:px-8 flex items-center justify-between shrink-0 z-10 shadow-xs">
           <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="lg:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:text-white shrink-0"
+              className="lg:hidden p-2 rounded-xl bg-gray-100 border border-gray-200 text-gray-700 hover:text-black shrink-0"
               aria-label="Toggle Navigation Menu"
             >
               {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
             <div className="min-w-0">
-              <span className="hidden md:inline-block text-xs font-bold text-gray-400 uppercase tracking-widest truncate">
+              <span className="hidden md:inline-block text-xs font-bold text-gray-500 uppercase tracking-widest truncate">
                 Fleet Operations & Intelligence Console
               </span>
-              <span className="inline-block md:hidden text-xs font-extrabold text-white truncate">
+              <span className="inline-block md:hidden text-xs font-extrabold text-[#151515] truncate">
                 Admin Console
               </span>
             </div>
@@ -159,12 +157,12 @@ const AdminLayout = () => {
 
           <div className="flex items-center gap-2 sm:gap-3.5 shrink-0">
             <ThemeSwitcher compact />
-            <div className="flex items-center gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-white/5 border border-white/10">
+            <div className="flex items-center gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-gray-100 border border-gray-200">
               <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-brand-primary/20 border border-brand-primary flex items-center justify-center text-brand-primary font-bold text-xs shrink-0">
                 {user?.name?.charAt(0).toUpperCase()}
               </div>
               <div className="text-left hidden sm:block">
-                <p className="text-xs font-bold text-white truncate max-w-[120px]">{user?.name}</p>
+                <p className="text-xs font-bold text-[#151515] truncate max-w-[120px]">{user?.name}</p>
                 <p className="text-[10px] text-brand-primary uppercase font-bold leading-none">Super Admin</p>
               </div>
             </div>
@@ -323,7 +321,7 @@ const AdminLayout = () => {
         </AnimatePresence>
 
         {/* Main Content Body */}
-        <main className="flex-1 p-3.5 sm:p-6 lg:p-8 overflow-y-auto w-full max-w-full">
+        <main className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto w-full max-w-full">
           <Outlet />
         </main>
       </div>

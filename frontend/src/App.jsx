@@ -19,11 +19,9 @@ import AboutUs from './pages/AboutUs';
 import Packages from './pages/Packages';
 import Services from './pages/Services';
 import Vehicles from './pages/Vehicles';
-import CarRental from './pages/CarRental';
-import ScootyRental from './pages/ScootyRental';
 import VehicleDetails from './pages/VehicleDetails';
 import ContactUs from './pages/ContactUs';
-import Login from './pages/Login';
+import SignIn from './pages/SignIn';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
@@ -36,8 +34,6 @@ import NotFound from './pages/NotFound';
 import AdminLayout from './admin/AdminLayout';
 import AdminDashboard from './admin/AdminDashboard';
 import AdminVehicles from './admin/AdminVehicles';
-import AddVehicle from './admin/AddVehicle';
-import EditVehicle from './admin/EditVehicle';
 import AdminBookings from './admin/AdminBookings';
 import AdminCustomers from './admin/AdminCustomers';
 import AdminPayments from './admin/AdminPayments';
@@ -147,7 +143,23 @@ function App() {
             path="/login"
             element={
               <CustomerLayout>
-                <Login />
+                <SignIn />
+              </CustomerLayout>
+            }
+          />
+          <Route
+            path="/signin"
+            element={
+              <CustomerLayout>
+                <SignIn />
+              </CustomerLayout>
+            }
+          />
+          <Route
+            path="/sign-in"
+            element={
+              <CustomerLayout>
+                <SignIn />
               </CustomerLayout>
             }
           />
@@ -177,6 +189,26 @@ function App() {
           />
 
           {/* Protected Customer Routes */}
+          <Route
+            path="/booking"
+            element={
+              <ProtectedRoute>
+                <CustomerLayout>
+                  <BookingCheckout />
+                </CustomerLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/book"
+            element={
+              <ProtectedRoute>
+                <CustomerLayout>
+                  <BookingCheckout />
+                </CustomerLayout>
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/booking/checkout"
             element={
@@ -220,8 +252,8 @@ function App() {
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="vehicles" element={<AdminVehicles />} />
-            <Route path="vehicles/add" element={<AddVehicle />} />
-            <Route path="vehicles/edit/:id" element={<EditVehicle />} />
+            <Route path="vehicles/add" element={<Navigate to="/admin/vehicles?add=true" replace />} />
+            <Route path="vehicles/edit/:id" element={<Navigate to="/admin/vehicles" replace />} />
             <Route path="bookings" element={<AdminBookings />} />
             <Route path="customers" element={<AdminCustomers />} />
             <Route path="payments" element={<AdminPayments />} />

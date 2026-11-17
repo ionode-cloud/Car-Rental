@@ -31,7 +31,7 @@ const VehicleCard = ({ vehicle }) => {
     navigate(`/vehicles/${vehicle._id}`);
   };
 
-  const handleViewDetails = (e) => {
+  const handleRentNow = (e) => {
     e.stopPropagation();
     navigate(`/vehicles/${vehicle._id}`);
   };
@@ -212,10 +212,10 @@ const VehicleCard = ({ vehicle }) => {
       <div className="pt-1.5 sm:pt-2">
         <button
           type="button"
-          onClick={handleViewDetails}
+          onClick={handleRentNow}
           className="btn-theme-gradient shine-sweep w-full py-2 sm:py-2.5 px-2 sm:px-3 rounded-lg sm:rounded-xl text-white text-[11px] sm:text-xs font-bold tracking-wide transition-all flex items-center justify-center gap-1 sm:gap-1.5 group/btn shadow-sm"
         >
-          <span>View Details</span>
+          <span>Rent now</span>
           <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 transform group-hover/btn:translate-x-1 transition-transform duration-300 shrink-0" />
         </button>
       </div>

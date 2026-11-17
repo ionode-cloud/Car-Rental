@@ -265,16 +265,16 @@ const MyBookings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F6FA] text-[#151515] pt-16 sm:pt-20 pb-28 sm:pb-20 selection:bg-brand-primary selection:text-white">
+    <div className="min-h-screen bg-[#F5F6FA] text-[#151515] pt-12 sm:pt-14 pb-16 sm:pb-14 selection:bg-brand-primary selection:text-white">
       {/* Decorative ambient subtle background gradients */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden z-0">
         <div className="absolute -top-40 right-1/4 w-96 h-96 bg-brand-primary/5 rounded-full blur-3xl" />
         <div className="absolute top-1/3 -left-32 w-80 h-80 bg-amber-400/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="container-fluid relative z-10 py-6 sm:py-8 max-w-7xl mx-auto">
+      <div className="container-fluid relative z-10 py-4 sm:py-5 max-w-7xl mx-auto">
         {/* Breadcrumb & Title */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div>
             <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 mb-1">
               <Link to="/" className="hover:text-brand-primary transition-colors">
@@ -298,7 +298,7 @@ const MyBookings = () => {
         </div>
 
         {/* User Profile & Metrics Banner */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-150 shadow-[0_4px_24px_rgba(0,0,0,0.03)] mb-8 transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.05)]">
+        <div className="bg-white rounded-2xl p-5 sm:p-6 border border-gray-150 shadow-[0_4px_24px_rgba(0,0,0,0.03)] mb-5 transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.05)]">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             {/* User Profile Info (Left 6 cols) */}
             <div className="lg:col-span-6 flex items-center gap-4 sm:gap-5">

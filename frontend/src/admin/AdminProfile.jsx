@@ -51,7 +51,7 @@ const AdminProfile = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-4 sm:space-y-5">
       <div>
         <span className="text-xs font-bold text-brand-primary uppercase tracking-wider">
           Security Console
@@ -62,9 +62,9 @@ const AdminProfile = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
         {/* Profile Info */}
-        <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-4">
+        <div className="glass-panel p-4 sm:p-5 rounded-2xl border border-white/10 space-y-3">
           <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
             <User className="w-4 h-4 text-brand-primary" />
             Admin Details
@@ -120,7 +120,7 @@ const AdminProfile = () => {
         </div>
 
         {/* Change Password */}
-        <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-4">
+        <div className="glass-panel p-4 sm:p-5 rounded-2xl border border-white/10 space-y-3">
           <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
             <Lock className="w-4 h-4 text-brand-primary" />
             Update Password

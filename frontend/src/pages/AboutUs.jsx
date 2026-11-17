@@ -72,7 +72,7 @@ const AboutUs = () => {
   return (
     <div className="bg-white text-[#151515] w-full">
       {/* ==================== 1. FULL WIDTH HEADER ==================== */}
-      <div className="w-full bg-[#F8F8FA] border-b border-[#EAEAEA] py-10 mb-12 rounded-none">
+      <div className="w-full bg-[#F8F8FA] border-b border-[#EAEAEA] py-7 mb-6 rounded-none">
         <div className="container-fluid text-center">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#151515] font-heading">
             About Us
@@ -84,7 +84,7 @@ const AboutUs = () => {
       </div>
 
       {/* Two-Column Intro */}
-      <section className="container-fluid mb-16">
+      <section className="container-fluid mb-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -131,7 +131,7 @@ const AboutUs = () => {
       </section>
 
       {/* ==================== 2. FULL WIDTH VIDEO SECTION ==================== */}
-      <section className="w-full mb-16 overflow-hidden rounded-none shadow-md">
+      <section className="w-full mb-8 overflow-hidden rounded-none shadow-md">
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -209,13 +209,13 @@ const AboutUs = () => {
       </AnimatePresence>
 
       {/* ==================== 3. STATISTICS ==================== */}
-      <section className="container-fluid mb-16">
+      <section className="container-fluid mb-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center py-10 border-y border-[#EAEAEA]"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center py-6 border-y border-[#EAEAEA]"
         >
           <motion.div whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
             <span className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-brand-primary">
@@ -247,7 +247,7 @@ const AboutUs = () => {
       </section>
 
       {/* ==================== 4. BENEFITS SECTION ==================== */}
-      <section className="container-fluid mb-16">
+      <section className="container-fluid mb-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -309,8 +309,8 @@ const AboutUs = () => {
       </section>
 
       {/* ==================== 6. CUSTOMER REVIEWS ==================== */}
-      <section className="container-fluid mb-16">
-        <div className="text-center mb-10">
+      <section className="container-fluid mb-8">
+        <div className="text-center mb-6">
           <h2 className="text-2xl sm:text-4xl font-extrabold text-[#151515] font-heading">
             Reviews from our customers
           </h2>
@@ -319,7 +319,7 @@ const AboutUs = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {REVIEWS.map((rev, idx) => (
             <motion.div
               key={idx}
@@ -328,11 +328,11 @@ const AboutUs = () => {
               viewport={{ once: true }}
               transition={{ delay: idx * 0.15, duration: 0.5 }}
               whileHover={{ y: -8, boxShadow: '0 20px 30px -10px rgba(0,0,0,0.08)' }}
-              className="p-6 sm:p-8 rounded-2xl bg-[#F8F8FA] border border-[#EAEAEA] flex flex-col justify-between shadow-sm transition-colors hover:border-brand-primary/30"
+              className="p-5 rounded-2xl bg-[#F8F8FA] border border-[#EAEAEA] flex flex-col justify-between shadow-sm transition-colors hover:border-brand-primary/30"
             >
               <div>
                 <Quote className="w-8 h-8 text-brand-primary mb-3 opacity-60" />
-                <p className="text-xs sm:text-sm text-[#777777] leading-relaxed mb-6">
+                <p className="text-xs sm:text-sm text-[#777777] leading-relaxed mb-4">
                   "{rev.text}"
                 </p>
               </div>
@@ -354,9 +354,9 @@ const AboutUs = () => {
       </section>
 
       {/* ==================== 7. TOP CAR RENTAL FAQ WITH ANIMATED ACCORDION ==================== */}
-      <section className="container-fluid mb-16">
+      <section className="container-fluid mb-8">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="text-center mb-5">
             <h2 className="text-2xl sm:text-4xl font-extrabold text-[#151515] font-heading">
               Top Car Rental Questions
             </h2>
@@ -413,8 +413,8 @@ const AboutUs = () => {
       </section>
 
       {/* ==================== 8. FULL WIDTH CTA BANNER ==================== */}
-      <section className="w-full bg-brand-primary text-white py-12 lg:py-16 rounded-none shadow-xl relative overflow-hidden">
-        <div className="container-fluid flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+      <section className="w-full bg-brand-primary text-white py-8 lg:py-10 rounded-none shadow-xl relative overflow-hidden">
+        <div className="container-fluid flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
           <div className="space-y-3">
             <h3 className="text-2xl sm:text-4xl font-extrabold font-heading">
               Looking for a car?

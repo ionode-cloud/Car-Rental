@@ -30,18 +30,18 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-brand-black flex items-center justify-center px-4 py-24">
-      <div className="w-full max-w-md glass-panel p-8 sm:p-10 rounded-3xl border border-white/15 shadow-2xl">
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-4">
-            <div className="w-10 h-10 rounded-xl theme-hero-gradient flex items-center justify-center shadow-primary-glow">
-              <Car className="w-6 h-6 text-white" />
+    <div className="min-h-screen bg-brand-black flex items-center justify-center px-4 py-10 sm:py-16">
+      <div className="w-full max-w-md glass-panel p-6 sm:p-8 rounded-2xl border border-white/15 shadow-2xl">
+        <div className="text-center mb-5">
+          <Link to="/" className="inline-flex items-center gap-2 mb-2.5">
+            <div className="w-9 h-9 rounded-xl theme-hero-gradient flex items-center justify-center shadow-primary-glow">
+              <Car className="w-5 h-5 text-white" />
             </div>
-            <span className="text-2xl font-extrabold tracking-tight text-white">
+            <span className="text-xl font-extrabold tracking-tight text-white">
               RIDE<span className="text-brand-primary">VISTA</span>
             </span>
           </Link>
-          <h1 className="text-2xl font-bold text-white">Reset Your Password</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-white">Reset Your Password</h1>
           <p className="text-xs text-gray-400 mt-1">
             Enter your registered email and we'll send you recovery instructions.
           </p>

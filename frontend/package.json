@@ -19,6 +19,7 @@
     "sonner": "^1.7.1"
   },
   "devDependencies": {
+    "@esbuild/win32-x64": "^0.21.5",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",

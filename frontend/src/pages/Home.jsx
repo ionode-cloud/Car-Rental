@@ -536,10 +536,10 @@ const Home = () => {
       {/* ========================================================
           4. FEATURES SECTION (Availability, Comfort, Savings)
           ======================================================== */}
-      <section className="container-fluid py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+      <section className="container-fluid py-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {/* Feature 1: Availability */}
-          <div className="card-animated-premium p-6 sm:p-8 flex flex-col items-center text-center group">
+          <div className="card-animated-premium p-5 flex flex-col items-center text-center group">
             <div className="w-16 h-16 rounded-2xl bg-brand-primaryLight text-brand-primary flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-sm">
               <Car className="w-8 h-8" />
             </div>
@@ -552,7 +552,7 @@ const Home = () => {
           </div>
 
           {/* Feature 2: Comfort */}
-          <div className="card-animated-premium p-6 sm:p-8 flex flex-col items-center text-center group">
+          <div className="card-animated-premium p-5 flex flex-col items-center text-center group">
             <div className="w-16 h-16 rounded-2xl bg-brand-primaryLight text-brand-primary flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-sm">
               <ShieldCheck className="w-8 h-8" />
             </div>
@@ -565,7 +565,7 @@ const Home = () => {
           </div>
 
           {/* Feature 3: Savings */}
-          <div className="card-animated-premium p-6 sm:p-8 flex flex-col items-center text-center group">
+          <div className="card-animated-premium p-5 flex flex-col items-center text-center group">
             <div className="w-16 h-16 rounded-2xl bg-brand-primaryLight text-brand-primary flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-sm">
               <BadgePercent className="w-8 h-8" />
             </div>
@@ -582,7 +582,7 @@ const Home = () => {
       {/* ========================================================
           5. ABOUT PREVIEW SECTION (2-Column About)
           ======================================================== */}
-      <section className="container-fluid pt-4 pb-6 sm:pt-6 sm:pb-8">
+      <section className="container-fluid pt-3 pb-5 sm:pt-4 sm:pb-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left: Large Rounded Image */}
           <div className="lg:col-span-6">
@@ -658,7 +658,7 @@ const Home = () => {
       {/* ========================================================
           6. PROMOTIONAL BANNER (Full-Width Edge-to-Edge)
           ======================================================== */}
-      <section className="w-full bg-brand-primary text-white py-12 lg:py-16 relative overflow-hidden shadow-xl rounded-none">
+      <section className="w-full bg-brand-primary text-white py-8 lg:py-10 relative overflow-hidden shadow-xl rounded-none">
         <div className="container-fluid">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             <div className="md:col-span-8 space-y-4">

@@ -8,6 +8,12 @@ const bookingSchema = new mongoose.Schema(
       unique: true,
       index: true,
     },
+    rentalCategory: {
+      type: String,
+      enum: ['self_drive', 'with_driver'],
+      default: 'self_drive',
+      index: true,
+    },
     customer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -31,7 +37,11 @@ const bookingSchema = new mongoose.Schema(
     },
     returnLocation: {
       type: String,
-      required: true,
+      default: '',
+    },
+    dropLocation: {
+      type: String,
+      default: '',
     },
     pickupDate: {
       type: Date,
@@ -50,23 +60,31 @@ const bookingSchema = new mongoose.Schema(
       default: '10:00 AM',
     },
     rentalDuration: {
-      days: { type: Number, required: true },
+      tier: { type: String, default: '24 Hours' },
+      days: { type: Number, default: 1 },
       hours: { type: Number, default: 0 },
+    },
+    driverIncluded: {
+      type: Boolean,
+      default: false,
     },
     customerDetails: {
       name: { type: String, required: true },
       email: { type: String, required: true },
       phone: { type: String, required: true },
+      aadhaarNumber: { type: String, default: '' },
+      aadhaarDocument: { type: String, default: '' },
       drivingLicenseNumber: { type: String, default: '' },
+      drivingLicenseDocument: { type: String, default: '' },
       additionalNotes: { type: String, default: '' },
     },
     priceBreakdown: {
-      dailyRate: { type: Number, required: true },
-      rentalDays: { type: Number, required: true },
+      dailyRate: { type: Number, default: 0 },
+      rentalDays: { type: Number, default: 1 },
       baseRental: { type: Number, required: true },
-      securityDeposit: { type: Number, default: 0 },
+      securityDeposit: { type: Number, default: 0 }, // 100% No Deposit Policy
       deliveryFee: { type: Number, default: 0 },
-      taxAmount: { type: Number, default: 0 }, // GST 18%
+      taxAmount: { type: Number, default: 0 },
       discountAmount: { type: Number, default: 0 },
       couponCode: { type: String, default: '' },
       finalAmount: { type: Number, required: true },
@@ -83,14 +101,14 @@ const bookingSchema = new mongoose.Schema(
     },
     bookingStatus: {
       type: String,
-      enum: ['Pending', 'Confirmed', 'Active', 'Completed', 'Cancelled', 'Rejected'],
+      enum: ['Pending', 'Confirmed', 'Ongoing', 'Active', 'Completed', 'Cancelled', 'Rejected'],
       default: 'Pending',
       index: true,
     },
     paymentMethod: {
       type: String,
       enum: ['Razorpay', 'Cash', 'Pay at Pickup'],
-      default: 'Razorpay',
+      default: 'Pay at Pickup',
     },
     paymentTransaction: {
       razorpayOrderId: { type: String, default: '' },
@@ -120,7 +138,7 @@ const bookingSchema = new mongoose.Schema(
   }
 );
 
-// Compound index for quick vehicle availability queries
+// Compound index for vehicle availability queries
 bookingSchema.index({ vehicle: 1, pickupDate: 1, returnDate: 1, bookingStatus: 1 });
 
 const Booking = mongoose.model('Booking', bookingSchema);

@@ -113,6 +113,7 @@ export const getVehicles = async (req, res) => {
       vehicles,
     });
   } catch (error) {
+    console.error('Error in getVehicles:', error);
     res.status(500).json({
       success: false,
       message: error.message || 'Failed to fetch vehicles',
@@ -151,6 +152,7 @@ export const getVehicleById = async (req, res) => {
       similarVehicles,
     });
   } catch (error) {
+    console.error('Error in getVehicleById:', error);
     res.status(500).json({
       success: false,
       message: error.message,
